@@ -1,0 +1,31 @@
+services:
+  database:
+    container_name: BTS-SIO-G2-2025-VELIKO-WEB-database
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: app_db
+      #MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Europe/Paris
+    volumes:
+      - ./var/dbdata:/var/lib/mysql
+  phpmyadmin:
+    container_name: BTS-SIO-G2-2025-VELIKO-WEB-pma
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8008:80"
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 1G
+      MEMORY_LIMIT: 512M
+      MAX_EXECUTION_TIME: 0
+    restart: always
+    links:
+      - database
+    depends_on:
+      - database
