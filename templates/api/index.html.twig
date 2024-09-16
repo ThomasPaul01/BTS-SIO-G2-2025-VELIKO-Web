@@ -36,6 +36,23 @@
                 maxZoom: 20
             }).addTo(map);
 
+            // Initialisation on user geolocation
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLat = position.coords.latitude;
+                    var userLon = position.coords.longitude;
+
+                    map.setView([userLat, userLon], 14);
+
+                    L.marker([userLat, userLon]).addTo(map)
+                        .bindPopup("Vous êtes ici").openPopup();
+                }, function(error) {
+                    console.error('Geolocation error: ' + error.message);
+                });
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+            }
+
 
             var markers = L.markerClusterGroup();
 
