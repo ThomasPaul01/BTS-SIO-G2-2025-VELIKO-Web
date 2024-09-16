@@ -57,16 +57,24 @@
             var markers = L.markerClusterGroup();
 
             var stations = {{ stations|json_encode()|raw }};
-            console.log('Stations data:', stations);
+            var statuses = {{ statuses|json_encode()|raw }};
 
             stations.forEach(function(station) {
+                var status = statuses[station.station_id] || {};
+                var mechanicalBikes = status.num_bikes_available_types?.[0]?.mechanical || 0;
+                var electricBikes = status.num_bikes_available_types?.[1]?.ebike || 0;
+
                 var marker = L.marker([station.lat, station.lon])
-                    .bindPopup("Nom : " + station.name +
-                        "<br>Capacité : " + station.capacity); // a completer avec capacite electrique et mecanique
+                    .bindPopup(
+                        "Nom : " + station.name +
+                        "<br>Capacité : " + station.capacity +
+                        "<br>Vélos mécaniques disponibles : " + mechanicalBikes +
+                        "<br>Vélos électriques disponibles : " + electricBikes
+                    );
                 markers.addLayer(marker);
             });
 
-            // Groupe Station
+            // Ajouter le groupe à la carte
             map.addLayer(markers);
         }
 

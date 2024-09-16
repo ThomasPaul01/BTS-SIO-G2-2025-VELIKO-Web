@@ -9,11 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Station;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
 {
-
     private $client;
     private $entityManager;
 
@@ -29,28 +27,43 @@ class ApiController extends AbstractController
      */
     public function fetchVelibData(): Response
     {
+        // Récupération des informations des stations (nom, coordonnées, etc.)
+        $stationInfoResponse = $this->client->request('GET', 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_information.json');
+        // Récupération du statut des stations (vélos disponibles)
+        $stationStatusResponse = $this->client->request('GET', 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_status.json');
 
-        $response = $this->client->request('GET', 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_information.json');
-
-        if ($response->getStatusCode() !== 200) {
-            return new Response('Error while fetching data: ' . $response->getStatusCode());
+        if ($stationInfoResponse->getStatusCode() !== 200 || $stationStatusResponse->getStatusCode() !== 200) {
+            return new Response('Error while fetching data.');
         }
 
-        $data = $response->toArray();
+        $stationInfoData = $stationInfoResponse->toArray();
+        $stationStatusData = $stationStatusResponse->toArray();
 
-        // Traitement des stations comme avant
-        foreach ($data["data"]["stations"] as $station) {
+        $stationStatuses = [];
+        foreach ($stationStatusData['data']['stations'] as $status) {
+            $stationStatuses[$status['station_id']] = $status;
+        }
+
+        // Traitement des stations
+        foreach ($stationInfoData["data"]["stations"] as $station) {
             $stationInDB = $this->entityManager->getRepository(Station::class)
                 ->findOneBy(['station_id' => $station["station_id"]]);
 
-            if (!$stationInDB) {
+            $status = $stationStatuses[$station["station_id"]] ?? null;
 
+            if (!$stationInDB) {
                 $newStation = new Station();
                 $newStation->setStationId($station["station_id"]);
                 $newStation->setName($station["name"]);
                 $newStation->setLatitude($station["lat"]);
                 $newStation->setLongitude($station["lon"]);
                 $newStation->setCapacity($station["capacity"]);
+
+                if ($status) {
+                    $newStation->setNumBikesAvailable($status["num_bikes_available"]);
+                    $newStation->setNumBikesAvailableMechanical($status["num_bikes_available_types"][0]["mechanical"] ?? 0);
+                    $newStation->setNumBikesAvailableElectric($status["num_bikes_available_types"][1]["ebike"] ?? 0);
+                }
 
                 $this->entityManager->persist($newStation);
             } else {
@@ -59,17 +72,21 @@ class ApiController extends AbstractController
                 $stationInDB->setLatitude($station["lat"]);
                 $stationInDB->setLongitude($station["lon"]);
                 $stationInDB->setCapacity($station["capacity"]);
+                if ($status) {
+                    $stationInDB->setNumBikesAvailable($status["num_bikes_available"]);
+                    $stationInDB->setNumBikesAvailableMechanical($status["num_bikes_available_types"][0]["mechanical"] ?? 0);
+                    $stationInDB->setNumBikesAvailableElectric($status["num_bikes_available_types"][1]["ebike"] ?? 0);
+                }
 
                 $this->entityManager->persist($stationInDB);
             }
         }
 
-
         $this->entityManager->flush();
-        return $this->render('api/index.html.twig'  , [
-            'stations' => $data['data']['stations'],
+
+        return $this->render('api/index.html.twig', [
+            'stations' => $stationInfoData['data']['stations'],
+            'statuses' => $stationStatuses,
         ]);
-
-
     }
 }

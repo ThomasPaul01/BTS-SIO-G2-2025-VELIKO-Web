@@ -23,7 +23,15 @@ class Station
     #[ORM\Column]
     private ?int $capacity = null;
 
-    // Getter et Setter pour station_id
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $numBikesAvailable = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $numBikesAvailableMechanical = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $numBikesAvailableElectric = null;
+
     public function getStationId(): ?int
     {
         return $this->station_id;
@@ -80,6 +88,42 @@ class Station
     public function setCapacity(int $capacity): static
     {
         $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    public function getNumBikesAvailable(): ?int
+    {
+        return $this->numBikesAvailable;
+    }
+
+    public function setNumBikesAvailable(?int $numBikesAvailable): static
+    {
+        $this->numBikesAvailable = $numBikesAvailable;
+
+        return $this;
+    }
+
+    public function getNumBikesAvailableMechanical(): ?int
+    {
+        return $this->numBikesAvailableMechanical;
+    }
+
+    public function setNumBikesAvailableMechanical(?int $numBikesAvailableMechanical): static
+    {
+        $this->numBikesAvailableMechanical = $numBikesAvailableMechanical;
+
+        return $this;
+    }
+
+    public function getNumBikesAvailableElectric(): ?int
+    {
+        return $this->numBikesAvailableElectric;
+    }
+
+    public function setNumBikesAvailableElectric(?int $numBikesAvailableElectric): static
+    {
+        $this->numBikesAvailableElectric = $numBikesAvailableElectric;
 
         return $this;
     }
