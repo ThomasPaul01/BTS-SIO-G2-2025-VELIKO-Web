@@ -66,7 +66,6 @@ class ApiController extends AbstractController
 
 
         $this->entityManager->flush();
-        var_dump("CHECK POINT");
         return $this->render('api/index.html.twig'  , [
             'stations' => $data['data']['stations'],
         ]);
