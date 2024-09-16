@@ -4,6 +4,9 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+
     <style>
         #map {
             height: 500px;
@@ -19,15 +22,12 @@
 
 {% block javascripts %}
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
     <script>
         function initMap() {
             console.log('Initializing map...');
-            var mapContainer = document.getElementById('map');
-            if (!mapContainer) {
-                console.error('Map container not found');
-                return;
-            }
 
+            //Initialisation Paris
             var map = L.map('map').setView([48.8566, 2.3522], 12);
 
             L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
@@ -36,16 +36,23 @@
                 maxZoom: 20
             }).addTo(map);
 
+
+            var markers = L.markerClusterGroup();
+
             var stations = {{ stations|json_encode()|raw }};
             console.log('Stations data:', stations);
 
             stations.forEach(function(station) {
-                L.marker([station.lat, station.lon]).addTo(map)
-                    .bindPopup(station.name);
+                var marker = L.marker([station.lat, station.lon])
+                    .bindPopup("Nom : " + station.name +
+                        "<br>Capacité : " + station.capacity); // a completer avec capacite electrique et mecanique
+                markers.addLayer(marker);
             });
+
+            // Groupe Station
+            map.addLayer(markers);
         }
 
         window.onload = initMap;
-
     </script>
 {% endblock %}
