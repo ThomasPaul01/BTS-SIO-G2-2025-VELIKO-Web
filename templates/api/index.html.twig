@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Carte des stations de vélos{% endblock %}
+{% block title %}VELIKO{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Carte des Stations de Vélo</h1>
+    <h1>VELIKO</h1>
     <div id="map"></div>
 {% endblock %}
 
@@ -71,6 +71,19 @@
                         "<br>Vélos mécaniques disponibles : " + mechanicalBikes +
                         "<br>Vélos électriques disponibles : " + electricBikes
                     );
+                // survol Station
+                marker.on('mouseover', function() {
+                    marker.bindPopup(
+                        "Nom : " + station.name +
+                        "<br>Capacité : " + station.capacity +
+                        "<br>Vélos mécaniques disponibles : " + mechanicalBikes +
+                        "<br>Vélos électriques disponibles : " + electricBikes
+                    ).openPopup();
+                });
+                // fin survol
+                marker.on('mouseout', function() {
+                    marker.closePopup();
+                });
                 markers.addLayer(marker);
             });
 
