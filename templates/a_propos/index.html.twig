@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}VELIKO-APropos{% endblock %}
+
+{% block stylesheets %}
+
+<style>
+    .about-section {
+        background-color: #f4f4f9;
+        padding: 50px 0;
+    }
+
+    .about-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .about-header {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    .about-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: #555;
+        text-align: justify;
+    }
+
+    .about-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin: 30px 0;
+    }
+
+    .about-text {
+        margin-bottom: 30px;
+    }
+
+    .about-highlight {
+        font-weight: bold;
+        color: #007BFF;
+    }
+
+    /* Style des fondateurs */
+    .founder-section {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .founders {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+
+    .founder-card {
+        width: 250px;
+        padding: 15px;
+        text-align: center;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .founder-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+
+    .founder-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .founder-role {
+        color: #666;
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="about-section">
+        <div class="about-container">
+            <h1 class="about-header">À Propos de Veliko</h1>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        Veliko est une entreprise dédiée à fournir une solution de mobilité durable et pratique à travers Paris et l'Île-de-France.
+                        Depuis sa création en réponse à l'initiative <span class="about-highlight">Vélib' Métropole</span>, Veliko a su s'imposer comme
+                        un acteur incontournable dans le domaine du transport urbain.
+                    </p>
+                    <p>
+                        Avec plus de <span class="about-highlight">19 000 vélos</span>, dont 40 % à assistance électrique, et plus de
+                        <span class="about-highlight">1 400 stations</span> disponibles, Veliko aide chaque jour des milliers d'usagers
+                        à se déplacer facilement et à réduire leur empreinte carbone.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="founder-section">
+                <h2>Rencontrez nos fondateurs</h2>
+                <div class="founders">
+                    <div class="founder-card">
+                        <div class="founder-name">Benjamin Poney</div>
+                        <div class="founder-role">Etudiant en 2TSSIO</div>
+                        <p></p>
+                    </div>
+                    <div class="founder-card">
+                        <div class="founder-name">Thomas Paul</div>
+                        <div class="founder-role">Etudiant en 2TSSIO</div>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
