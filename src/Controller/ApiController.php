@@ -3,90 +3,61 @@
 
 namespace App\Controller;
 
+use App\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Station;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ApiController extends AbstractController
 {
-    private $client;
-    private $entityManager;
+    private $request;
 
-    public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager)
+    public function __construct(Request $request)
     {
-        $this->client = $client;
-        $this->entityManager = $entityManager;
+        $this->request = $request;
     }
 
     /**
-     * @Route("/api/velib", name="fetch_velib_data")
-     * @throws TransportExceptionInterface
+     * @Route("/api/velib", name="fetch_veliko_data")
      */
-    public function fetchVelibData(): Response
+    public function fetchVelikoData(): Response
     {
-        // Récupération des informations des stations (nom, coordonnées, etc.)
-        $stationInfoResponse = $this->client->request('GET', 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_information.json');
-        // Récupération du statut des stations (vélos disponibles)
-        $stationStatusResponse = $this->client->request('GET', 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/station_status.json');
+        $url = 'http://localhost:9042/api/stations';
+        $statusUrl = 'http://localhost:9042/api/stations/status';
 
-        if ($stationInfoResponse->getStatusCode() !== 200 || $stationStatusResponse->getStatusCode() !== 200) {
-            return new Response('Error while fetching data.');
+        try {
+            $stations = $this->request->RequestApi($url);
+            $stationStatuses = $this->request->RequestApi($statusUrl);
+        } catch (\Exception $e) {
+            return new Response("Erreur lors de l'appel à l'API: " . $e->getMessage(), 500);
         }
 
-        $stationInfoData = $stationInfoResponse->toArray();
-        $stationStatusData = $stationStatusResponse->toArray();
+        $stationsWithStatuses = [];
+        foreach ($stations as $station) {
+            $stationId = $station['station_id'];
+            foreach ($stationStatuses as $stationStatus) {
+                if($stationId == $stationStatus['station_id']) {
 
-        $stationStatuses = [];
-        foreach ($stationStatusData['data']['stations'] as $status) {
-            $stationStatuses[$status['station_id']] = $status;
-        }
+                    // Récupération des informations de la station
+                    $stationData = [
+                        'name' => $station['name'],
+                        'capacity' => $station['capacity'],
+                        'lat' => $station['lat'],
+                        'lon' => $station['lon'],
+                        'mechanical_bikes' => $stationStatus['num_bikes_available_types'][0]['mechanical'] ?? 0,
+                        'electric_bikes' => $stationStatus['num_bikes_available_types'][1]['ebike'] ?? 0,
+                    ];
+                    //dump($stationData);
+                    $stationsWithStatuses[] = $stationData;
 
-        // Traitement des stations
-        foreach ($stationInfoData["data"]["stations"] as $station) {
-            $stationInDB = $this->entityManager->getRepository(Station::class)
-                ->findOneBy(['station_id' => $station["station_id"]]);
-
-            $status = $stationStatuses[$station["station_id"]] ?? null;
-
-            if (!$stationInDB) {
-                $newStation = new Station();
-                $newStation->setStationId($station["station_id"]);
-                $newStation->setName($station["name"]);
-                $newStation->setLatitude($station["lat"]);
-                $newStation->setLongitude($station["lon"]);
-                $newStation->setCapacity($station["capacity"]);
-
-                if ($status) {
-                    $newStation->setNumBikesAvailable($status["num_bikes_available"]);
-                    $newStation->setNumBikesAvailableMechanical($status["num_bikes_available_types"][0]["mechanical"] ?? 0);
-                    $newStation->setNumBikesAvailableElectric($status["num_bikes_available_types"][1]["ebike"] ?? 0);
+                    break;
                 }
-
-                $this->entityManager->persist($newStation);
-            } else {
-                // La station existe déjà, on la met à jour
-                $stationInDB->setName($station["name"]);
-                $stationInDB->setLatitude($station["lat"]);
-                $stationInDB->setLongitude($station["lon"]);
-                $stationInDB->setCapacity($station["capacity"]);
-                if ($status) {
-                    $stationInDB->setNumBikesAvailable($status["num_bikes_available"]);
-                    $stationInDB->setNumBikesAvailableMechanical($status["num_bikes_available_types"][0]["mechanical"] ?? 0);
-                    $stationInDB->setNumBikesAvailableElectric($status["num_bikes_available_types"][1]["ebike"] ?? 0);
-                }
-
-                $this->entityManager->persist($stationInDB);
             }
-        }
 
-        $this->entityManager->flush();
+
+        }
 
         return $this->render('api/index.html.twig', [
-            'stations' => $stationInfoData['data']['stations'],
-            'statuses' => $stationStatuses,
+            'stations' => $stationsWithStatuses,
         ]);
     }
 }

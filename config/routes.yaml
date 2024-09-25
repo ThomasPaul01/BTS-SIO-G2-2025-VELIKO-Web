@@ -7,5 +7,5 @@ controllers:
 # config/routes.yaml
 
 api_fetch:
-    path: /api/velib
-    controller: App\Controller\ApiController::fetchVelibData
+    path: /
+    controller: App\Controller\ApiController::fetchVelikoData

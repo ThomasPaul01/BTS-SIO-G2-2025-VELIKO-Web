@@ -16,7 +16,6 @@
 {% endblock %}
 
 {% block content %}
-
     <div id="map"></div>
 {% endblock %}
 
@@ -27,7 +26,7 @@
         function initMap() {
             console.log('Initializing map...');
 
-            //Initialisation Paris
+            // Initialisation de la carte
             var map = L.map('map').setView([48.8566, 2.3522], 12);
 
             L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
@@ -36,7 +35,7 @@
                 maxZoom: 20
             }).addTo(map);
 
-            // Initialisation on user geolocation
+            // Initialisation de la géolocalisation
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var userLat = position.coords.latitude;
@@ -46,6 +45,7 @@
 
                     L.marker([userLat, userLon]).addTo(map)
                         .bindPopup("Vous êtes ici").openPopup();
+
                 }, function(error) {
                     console.error('Geolocation error: ' + error.message);
                 });
@@ -53,44 +53,43 @@
                 console.error("Geolocation is not supported by this browser.");
             }
 
-
             var markers = L.markerClusterGroup();
-
             var stations = {{ stations|json_encode()|raw }};
-            var statuses = {{ statuses|json_encode()|raw }};
 
-            stations.forEach(function(station) {
-                var status = statuses[station.station_id] || {};
-                var mechanicalBikes = status.num_bikes_available_types?.[0]?.mechanical || 0;
-                var electricBikes = status.num_bikes_available_types?.[1]?.ebike || 0;
+            if (Array.isArray(stations)) {
+                stations.forEach(function(station) {
 
-                var marker = L.marker([station.lat, station.lon])
-                    .bindPopup(
-                        "Nom : " + station.name +
-                        "<br>Capacité : " + station.capacity +
-                        "<br>Vélos mécaniques disponibles : " + mechanicalBikes +
-                        "<br>Vélos électriques disponibles : " + electricBikes
-                    );
+                    var marker = L.marker([station.lat, station.lon])
+                        .bindPopup(
+                            "Nom : " + station.name +
+                            "<br>Capacité : " + station.capacity +
+                            "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
+                            "<br>Vélos électriques disponibles : " + station.electric_bikes
+                        );
 
-                // survol Station
-                marker.on('mouseover', function() {
-                    marker.bindPopup(
-                        "Nom : " + station.name +
-                        "<br>Capacité : " + station.capacity +
-                        "<br>Vélos mécaniques disponibles : " + mechanicalBikes +
-                        "<br>Vélos électriques disponibles : " + electricBikes
-                    ).openPopup();
+                    marker.on('mouseover', function() {
+                        marker.bindPopup(
+                            "Nom : " + station.name +
+                            "<br>Capacité : " + station.capacity +
+                            "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
+                                "<br>Vélos électriques disponibles : " + station.electric_bikes
+                            ).openPopup();
+                        });
+
+                        // Fin survol
+                        marker.on('mouseout', function() {
+                            marker.closePopup();
+                        });
+
+
+                        markers.addLayer(marker);
+
                 });
+            } else {
+                console.error("Les données des stations ne sont pas sous forme de tableau.");
+            }
 
-                // fin survol
-                marker.on('mouseout', function() {
-                    marker.closePopup();
-                });
-
-                markers.addLayer(marker);
-            });
-
-            // Ajouter le groupe à la carte
+            // Ajouter le groupe de marqueurs à la carte
             map.addLayer(markers);
         }
 
