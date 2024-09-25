@@ -8,7 +8,6 @@
 
         <style>
 
-
             #head {
                 text-align: center;
                 margin-top: 30px;
@@ -16,10 +15,32 @@
                    margin-top: 30px = ajoute un espace (marge) de 30 pixels au-dessus de cet élément. */
             }
 
-
-
-
-
+            /**/
+            nav.navbar {
+                background-color: #343a40;
+                margin-bottom: 20px;
+            }
+            nav.navbar a.navbar-brand,
+            nav.navbar a.nav-link {
+                color: #ffffff !important;
+            }
+            .card {
+                margin: 20px 0;
+            }
+            footer {
+                background-color: #343a40;
+                color: #ffffff;
+                text-align: center;
+                padding: 20px;
+                margin-top: 40px;
+            }
+            .footer-link {
+                color: #ffffff;
+                text-decoration: none;
+            }
+            .footer-link:hover {
+                text-decoration: underline;
+            }
 
         </style>
 
@@ -28,14 +49,50 @@
     </head>
 
     <body>
+
+    {##}
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"></a>    {#On peut mettre un titre pour en haut a gauche#}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">À propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Se déconnecter</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container" id="head">
         <img src="{{ asset('images/logoVeliko.png') }}" width="200"  >
         <h1></h1>
     </div>
-
     <div class="container">
             {% block content %}{% endblock %}
     </div>
+
+    {##}
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 MonProjet. Tous droits réservés.</p>
+            <a href="#" class="footer-link">Mentions légales</a> |
+            <a href="#" class="footer-link">Politique de confidentialité</a> |
+            <a href="#" class="footer-link">Contact</a>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
