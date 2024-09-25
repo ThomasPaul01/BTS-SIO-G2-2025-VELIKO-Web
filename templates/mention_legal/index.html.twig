@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}VELIKO-MentionLegal{% endblock %}
+
+
+{% block stylesheets %}
+    <style>
+
+        .legal-section {
+            background-color: #f4f4f9;
+            padding: 50px 0;
+        }
+
+        .legal-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .legal-header {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .legal-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+        }
+
+        .legal-title {
+            font-weight: bold;
+            margin-top: 20px;
+            color: #007BFF;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+<div class="legal-section">
+    <div class="legal-container">
+        <h1 class="legal-header">Mentions Légales</h1>
+        <div class="legal-content">
+            <p>
+                Conformément aux dispositions des articles 6-III et 19 de la Loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique,
+                nous vous informons des éléments suivants :
+            </p>
+
+            <div class="legal-title">1. Éditeur du site</div>
+            <p>
+                Le site <strong>Veliko</strong> est édité par : <br>
+                Poney Benjamin et Paul Thomas  <br>
+                43 Rue Raspail, 93100 Montreuil <br>
+                +33 6 10 47 17 18 | +33 6 50 15 81 62  <br>
+                contact@veliko.com <br>
+            </p>
+
+            <div class="legal-title">3. Propriété intellectuelle</div>
+            <p>
+                Tous les éléments présents sur ce site, y compris, mais sans s'y limiter, les textes, images, logos et graphismes,
+                sont la propriété exclusive de <strong>Veliko</strong> ou de tiers ayant autorisé <strong>Veliko</strong> à les utiliser.
+                Toute reproduction, distribution, modification ou utilisation de ces éléments sans autorisation préalable est interdite.
+            </p>
+
+            <div class="legal-title">4. Données personnelles</div>
+            <p>
+                En vertu de la loi Informatique et Libertés du 6 janvier 1978 modifiée et du Règlement Général sur la Protection des Données (RGPD),
+                vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant.
+                Pour exercer ces droits, veuillez nous contacter à l'adresse e-mail indiquée ci-dessus.
+            </p>
+
+            <div class="legal-title">5. Limitation de responsabilité</div>
+            <p>
+                <strong>Veliko</strong> ne saurait être tenu responsable des dommages directs ou indirects résultant de l'accès ou de l'utilisation de ce site,
+                y compris, sans limitation, les pertes de données ou de profits, ou encore les dommages causés par des virus ou autres logiciels malveillants.
+            </p>
+
+            <div class="legal-title">6. Modifications des mentions légales</div>
+            <p>
+                Nous nous réservons le droit de modifier ces mentions légales à tout moment. Il est donc conseillé de les consulter régulièrement.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

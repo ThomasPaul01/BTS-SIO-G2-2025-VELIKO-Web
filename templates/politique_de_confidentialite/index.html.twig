@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}VELIKO - Politique de Confidentialité{% endblock %}
+
+
+{% block stylesheets %}
+    <style>
+        .privacy-wrapper {
+            margin: 2em auto;
+            max-width: 900px;
+            width: 95%;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 1em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.6em;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        p, ul {
+            font-size: 1.1em;
+            margin-bottom: 1em;
+            color: #555;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        .contact-info {
+            font-style: italic;
+            color: #2980b9;
+        }
+
+        .highlight {
+            background-color: #eaf2f8;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="privacy-wrapper">
+        <h1>Politique de confidentialité de Veliko</h1>
+
+        <h2>1. Introduction</h2>
+        <p>Cette politique décrit la collecte, l'utilisation et la protection des données personnelles des utilisateurs de Veliko, conformément au RGPD.</p>
+
+        <h2>2. Responsable des données</h2>
+        <p>Veliko, entreprise de vélos partagés à Paris, est responsable du traitement des données. Contact : <span class="contact-info">privacy@veliko.fr</span>.</p>
+
+        <h2>3. Données collectées</h2>
+        <p>Nous collectons :</p>
+        <ul>
+            <li><strong>Données fournies :</strong> nom, prénom, e-mail, date de naissance, adresse, identifiant, mot de passe.</li>
+            <li><strong>Données automatiques :</strong> géolocalisation, interactions avec l'application.</li>
+            <li><strong>Données tierces :</strong> abonnements via des tiers.</li>
+        </ul>
+
+        <h2>4. Utilisation des données</h2>
+        <p>Les données sont utilisées pour :</p>
+        <ul>
+            <li>Fournir et améliorer le service.</li>
+            <li>Gérer les comptes utilisateurs.</li>
+            <li>Respecter les obligations légales.</li>
+        </ul>
+
+        <h2>5. Partage des données</h2>
+        <p>Vos données ne seront pas vendues. Elles peuvent être partagées avec :</p>
+        <ul>
+            <li>Partenaires techniques.</li>
+            <li>Autorités compétentes, si requis par la loi.</li>
+        </ul>
+
+        <h2>6. Sécurité des données</h2>
+        <p>Nous utilisons des protocoles de cryptage comme HTTPS pour sécuriser vos données.</p>
+
+        <h2>7. Vos droits</h2>
+        <p>Vous avez le droit d'accéder, de rectifier et d'effacer vos données, ainsi que de limiter ou de retirer votre consentement. Contact : <span class="contact-info">privacy@veliko.fr</span>.</p>
+
+        <h2>8. Conservation des données</h2>
+        <p>Les données sont conservées tant que nécessaire pour le service et les obligations légales.</p>
+
+        <h2>9. Cookies</h2>
+        <p>Nous utilisons des cookies pour améliorer l'expérience utilisateur. Vous pouvez gérer vos préférences via votre navigateur.</p>
+
+        <h2>10. Modifications</h2>
+        <p>Nous nous réservons le droit de modifier cette politique. Les changements seront publiés dans l'application.</p>
+    </div>
+
+{% endblock %}
