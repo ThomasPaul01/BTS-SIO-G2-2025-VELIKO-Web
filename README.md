@@ -13,3 +13,28 @@ Installation des dépendances avec composer(vendor)
 ```bash
 composer install
 ```
+
+### Etape 3 : Installation BDD
+creation, lancement des containers
+```
+docker-compose up -d
+```
+Executez la migration
+```
+symfony console doctrine:migrations:migrate
+```
+
+**Info :** Commande de lancement et d'arret Symfony :
+
+Pour lancer le serveur
+```
+symfony server:start
+```
+Pour arreter le serveur
+```
+symfony server:stop
+```
+Arreter containers and supprime containers
+```
+docker-compose down
+```
