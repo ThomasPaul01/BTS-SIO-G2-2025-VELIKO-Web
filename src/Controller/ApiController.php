@@ -25,6 +25,7 @@ class ApiController extends AbstractController
         $statusUrl = 'http://localhost:9042/api/stations/status';
 
         try {
+            // Request Api
             $stations = $this->request->RequestApi($url);
             $stationStatuses = $this->request->RequestApi($statusUrl);
         } catch (\Exception $e) {

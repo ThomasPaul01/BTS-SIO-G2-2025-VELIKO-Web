@@ -6,6 +6,7 @@ class Request
 {
     public function RequestApi($url)
     {
+        // Methode request donné Api Via url
 
         $curl = curl_init();
 

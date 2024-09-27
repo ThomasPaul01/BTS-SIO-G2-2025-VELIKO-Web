@@ -35,7 +35,7 @@
                 maxZoom: 20
             }).addTo(map);
 
-            // Initialisation de la géolocalisation
+            // Initialisation de la géolocalisation User
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var userLat = position.coords.latitude;
@@ -56,6 +56,7 @@
             var markers = L.markerClusterGroup();
             var stations = {{ stations|json_encode()|raw }};
 
+            // Afficher Station et Information sur celle-ci
             if (Array.isArray(stations)) {
                 stations.forEach(function(station) {
 
@@ -67,6 +68,7 @@
                             "<br>Vélos électriques disponibles : " + station.electric_bikes
                         );
 
+                    // Afficher info durant un survol
                     marker.on('mouseover', function() {
                         marker.bindPopup(
                             "Nom : " + station.name +
@@ -81,7 +83,7 @@
                             marker.closePopup();
                         });
 
-
+                        // Groupe Marqueur
                         markers.addLayer(marker);
 
                 });
