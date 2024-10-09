@@ -31,6 +31,7 @@ class ApiController extends AbstractController
             return new Response("Erreur lors de l'appel à l'API: " . $e->getMessage(), 500);
         }
 
+        
         $stationsWithStatuses = [];
         foreach ($stations as $station) {
             $stationId = $station['station_id'];
