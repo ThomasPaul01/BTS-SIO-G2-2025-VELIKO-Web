@@ -25,9 +25,7 @@ class Request
 
         curl_close($curl);
 
-        $response = json_decode($response, true);
-
-        return $response;
+        return json_decode($response, true);
 
 
     }
