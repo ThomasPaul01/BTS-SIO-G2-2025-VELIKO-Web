@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ApiController extends AbstractController
 {
@@ -16,9 +17,7 @@ class ApiController extends AbstractController
         $this->request = $request;
     }
 
-    /**
-     * @Route("/api/velib", name="fetch_veliko_data")
-     */
+    #[Route('/map', name: 'fetchVelikoData')]
     public function fetchVelikoData(): Response
     {
         $url = 'http://localhost:9042/api/stations';
@@ -54,11 +53,18 @@ class ApiController extends AbstractController
                 }
             }
 
+        }
 
+        //recover the id
+        $user = $this->getUser();
+        $userEmail = null;
+        if ($user) {
+            $userEmail = $user->getUserIdentifier();
         }
 
         return $this->render('api/index.html.twig', [
             'stations' => $stationsWithStatuses,
+            'userEmail' => $userEmail,
         ]);
     }
 }

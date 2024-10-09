@@ -6,6 +6,4 @@ controllers:
 
 # config/routes.yaml
 
-api_fetch:
-    path: /
-    controller: App\Controller\ApiController::fetchVelikoData
+
