@@ -26,6 +26,13 @@ class AppFixtures extends Fixture
         $user->setEmail("admin@mail.dev");
         $user->setPassword($this->hasher->hashPassword($user, 'admin'));
         $user->setRoles(["ROLE_ADMIN"]);
+        $user->setAddress("12 rue chezMoi");
+        $user->setName("Admin");
+        $user->setPostalCode("92200");
+        $user->setCity("Paris");
+        $user->setFirstName("Admin");
+        $date=new \DateTime("2025-01-01");
+        $user->setBirthdate($date);
         $manager->persist($user);
 
         // Standard users
@@ -34,6 +41,13 @@ class AppFixtures extends Fixture
             $user->setEmail("user-$i@mail.dev");
             $user->setPassword($this->hasher->hashPassword($user, 'password'));
             $user->setRoles(["ROLE_USER"]);
+            $user->setAddress("12 rue chezMoi");
+            $user->setName("user");
+            $user->setPostalCode("00000");
+            $user->setCity("Paris");
+            $user->setFirstName("user");
+            $date=new \DateTime("2025-01-01");
+            $user->setBirthdate($date);
             $manager->persist($user);
         }
 
