@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Request;
 
 class Request
 {
@@ -11,8 +11,8 @@ class Request
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_PORT => "9042",
-            CURLOPT_URL => $url,
+            CURLOPT_PORT => $_ENV['API_VELIKO_PORT'],
+            CURLOPT_URL => $_ENV["API_VELIKO_URL"].$url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,

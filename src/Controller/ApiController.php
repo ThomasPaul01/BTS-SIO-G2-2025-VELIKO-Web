@@ -3,8 +3,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Station;
 use App\Entity\StationFav;
-use App\Request;
+use App\Request\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,66 +20,102 @@ class ApiController extends AbstractController
     public function __construct(Request $request)
     {
         $this->request = $request;
+
     }
 
     #[Route('/map', name: 'fetchVelikoData')]
-    public function fetchVelikoData(): Response
+    public function fetchVelikoData(EntityManagerInterface $entityManager): Response
     {
-        $url = 'http://localhost:9042/api/stations';
-        $statusUrl = 'http://localhost:9042/api/stations/status';
+
+
+        $stationUrl = '/api/stations';
+        $statusUrl = '/api/stations/status';
 
         try {
             // Request Api
-            $stations = $this->request->RequestApi($url);
+            $stations = $this->request->RequestApi($stationUrl);
             $stationStatuses = $this->request->RequestApi($statusUrl);
+
         } catch (\Exception $e) {
             return new Response("Erreur lors de l'appel à l'API: " . $e->getMessage(), 500);
         }
 
-        
-        $stationsWithStatuses = [];
         foreach ($stations as $station) {
             $stationId = $station['station_id'];
             foreach ($stationStatuses as $stationStatus) {
-                if($stationId == $stationStatus['station_id']) {
+                if ($stationId == $stationStatus['station_id']) {
+                    // Vérifiez si la station existe déjà dans la base de données
+                    $existingStation = $entityManager->getRepository(Station::class)->findOneBy(['station_id' => $stationId]);
 
-                    // Récupération des informations de la station
-                    $stationData = [
-                        'id' => $stationId,
-                        'name' => $station['name'],
-                        'capacity' => $station['capacity'],
-                        'lat' => $station['lat'],
-                        'lon' => $station['lon'],
-                        'mechanical_bikes' => $stationStatus['num_bikes_available_types'][0]['mechanical'] ?? 0,
-                        'electric_bikes' => $stationStatus['num_bikes_available_types'][1]['ebike'] ?? 0,
-                    ];
-                    //dump($stationData);
-                    $stationsWithStatuses[] = $stationData;
+                    if (!$existingStation) {
+                        $stationEntity = new Station();
+                        $stationEntity->setStationId($stationId);
+                        $stationEntity->setName($station['name']);
+                        $stationEntity->setCapacity($station['capacity']);
+                        $stationEntity->setLat($station['lat']);
+                        $stationEntity->setLon($station['lon']);
+                        $stationEntity->setMechanicalBikes($stationStatus['num_bikes_available_types'][0]['mechanical'] ?? 0);
+                        $stationEntity->setElectricBikes($stationStatus['num_bikes_available_types'][1]['ebike'] ?? 0);
+
+                        $entityManager->persist($stationEntity);
+                    } else {
+                        // Vous pouvez mettre à jour les informations si la station existe déjà
+                        $existingStation->setCapacity($station['capacity']);
+                        $existingStation->setLat($station['lat']);
+                        $existingStation->setLon($station['lon']);
+                        $existingStation->setMechanicalBikes($stationStatus['num_bikes_available_types'][0]['mechanical'] ?? 0);
+                        $existingStation->setElectricBikes($stationStatus['num_bikes_available_types'][1]['ebike'] ?? 0);
+                    }
 
                     break;
                 }
             }
-
         }
 
-        //recover the id
+        $entityManager->flush();
+
+        // Récupérer toutes les stations de la base de données
+        $allStations = $entityManager->getRepository(Station::class)->findAll();
+
+        // Créer le tableau de données à envoyer au template
+        $stationsData = [];
+        foreach ($allStations as $station) {
+            $stationsData[] = [
+                'station_id' => $station->getStationId(),
+                'name' => $station->getName(),
+                'capacity' => $station->getCapacity(),
+                'lat' => $station->getLat(),
+                'lon' => $station->getLon(),
+                'mechanical_bikes' => $station->getMechanicalBikes(),
+                'electric_bikes' => $station->getElectricBikes(),
+            ];
+        }
+
+        // Récupérer l'email de l'utilisateur
         $user = $this->getUser();
-        $userEmail = null;
-        if ($user) {
-            $userEmail = $user->getUserIdentifier();
-        }
+        $userEmail = $user?->getUserIdentifier();
+
 
         return $this->render('api/index.html.twig', [
-            'stations' => $stationsWithStatuses,
+            'stations' => $stationsData,
             'userEmail' => $userEmail,
         ]);
     }
+
+
     #[Route('/add-favorite/{stationId}', name: 'add_favorite')]
     public function addFavorite(int $stationId, EntityManagerInterface $entityManager, Security $security): JsonResponse
     {
         $user = $security->getUser();
-        // To Do : verification user / station
-        //         retirer station si deja favorite
+
+        $existingFavorite = $entityManager->getRepository(StationFav::class)->findOneBy([
+            'station_id' => $stationId,
+            'userEmail' => $user->getUserIdentifier()
+        ]);
+
+        if ($existingFavorite) {
+            return new JsonResponse(['error' => 'Station already in favorites'], 400);
+        }
 
         //push  new Favorite Station to BDD with emailUser
         $favorite = new StationFav();
@@ -86,7 +123,12 @@ class ApiController extends AbstractController
         $favorite->setStationId($stationId);
 
         $entityManager->persist($favorite);
-        $entityManager->flush();
+
+        try {
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Erreur lors de l\'ajout aux favoris: ' . $e->getMessage()], 500);
+        }
 
         return new JsonResponse(['success' => true, 'action' => 'added']);
     }

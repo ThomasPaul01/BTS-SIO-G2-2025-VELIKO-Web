@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <p>Connected as: {{ userEmail }}</p>
+    <p>Connecté en tant que : {{ userEmail }}</p>
     <div id="map"></div>
 {% endblock %}
 
@@ -25,7 +25,7 @@
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
     <script>
         function initMap() {
-            console.log('Initializing map...');
+            console.log('Initialisation de la carte...');
 
             // Initialisation de la carte
             var map = L.map('map').setView([48.8566, 2.3522], 12);
@@ -60,15 +60,14 @@
             // Afficher Station et Information sur celle-ci
             if (Array.isArray(stations)) {
                 stations.forEach(function(station) {
-
                     var marker = L.marker([station.lat, station.lon])
                         .bindPopup(
                             "Nom : " + station.name +
                             "<br>Capacité : " + station.capacity +
                             "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
-                            "<br>Vélos électriques disponibles : " + station.electric_bikes
+                            "<br>Vélos électriques disponibles : " + station.electric_bikes +
+                            "<br><button onclick='addToFavorites(" + station.station_id + ")'>Ajouter aux favoris</button>"
                         );
-
 
                     // Afficher info durant un survol
                     marker.on('mouseover', function() {
@@ -76,15 +75,14 @@
                             "Nom : " + station.name +
                             "<br>Capacité : " + station.capacity +
                             "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
-                            "<br>Vélos électriques disponibles : " + station.electric_bikes+
-                            "<br><button onclick='addToFavorites(" + station.id + ")'>Ajouter aux favoris</button>"
+                            "<br>Vélos électriques disponibles : " + station.electric_bikes +
+                            "<br><button onclick='addToFavorites(" + station.station_id + ")'>Ajouter aux favoris</button>"
                         ).openPopup();
-                        });
-
-                        // Groupe Marqueur
-                        markers.addLayer(marker);
-
                     });
+
+                    // Ajouter le marqueur au groupe de marqueurs
+                    markers.addLayer(marker);
+                });
             } else {
                 console.error("Les données des stations ne sont pas sous forme de tableau.");
             }
@@ -92,19 +90,21 @@
             // Ajouter le groupe de marqueurs à la carte
             map.addLayer(markers);
         }
+
         function addToFavorites(stationId) {
-            alert(stationId)
+            console.log('Tentative d\'ajout de la station aux favoris :', stationId);
             fetch(`/add-favorite/${stationId}`, { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
                         alert('Station ajoutée aux favoris !');
                     } else {
-                        alert('Erreur lors de l\'ajout aux favoris.');
+                        return response.json().then(data => {
+                            alert('Erreur : ' + (data.error || 'Erreur inconnue.'));
+                        });
                     }
                 })
                 .catch(error => console.error('Erreur:', error));
         }
-
 
         window.onload = initMap;
     </script>

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Favoris{% endblock %}
+
+{% block content %}
+    <h1>Mes Stations Favorites</h1>
+
+    {% if favorites|length > 0 %}
+        <table>
+            <thead>
+            </thead>
+            <tbody>
+            {% for favorite in favorites %}
+                <tr>
+                    <td>{{ favorite.stationId }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune station en favoris.</p>
+    {% endif %}
+{% endblock %}
