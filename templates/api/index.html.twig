@@ -69,25 +69,22 @@
                             "<br>Vélos électriques disponibles : " + station.electric_bikes
                         );
 
+
                     // Afficher info durant un survol
                     marker.on('mouseover', function() {
                         marker.bindPopup(
                             "Nom : " + station.name +
                             "<br>Capacité : " + station.capacity +
                             "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
-                                "<br>Vélos électriques disponibles : " + station.electric_bikes
-                            ).openPopup();
-                        });
-
-                        // Fin survol
-                        marker.on('mouseout', function() {
-                            marker.closePopup();
+                            "<br>Vélos électriques disponibles : " + station.electric_bikes+
+                            "<br><button onclick='addToFavorites(" + station.id + ")'>Ajouter aux favoris</button>"
+                        ).openPopup();
                         });
 
                         // Groupe Marqueur
                         markers.addLayer(marker);
 
-                });
+                    });
             } else {
                 console.error("Les données des stations ne sont pas sous forme de tableau.");
             }
@@ -95,6 +92,19 @@
             // Ajouter le groupe de marqueurs à la carte
             map.addLayer(markers);
         }
+        function addToFavorites(stationId) {
+            alert(stationId)
+            fetch(`/add-favorite/${stationId}`, { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Station ajoutée aux favoris !');
+                    } else {
+                        alert('Erreur lors de l\'ajout aux favoris.');
+                    }
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+
 
         window.onload = initMap;
     </script>

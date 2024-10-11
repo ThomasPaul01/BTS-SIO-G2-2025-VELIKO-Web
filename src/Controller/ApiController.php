@@ -3,8 +3,12 @@
 
 namespace App\Controller;
 
+use App\Entity\StationFav;
 use App\Request;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -40,6 +44,7 @@ class ApiController extends AbstractController
 
                     // Récupération des informations de la station
                     $stationData = [
+                        'id' => $stationId,
                         'name' => $station['name'],
                         'capacity' => $station['capacity'],
                         'lat' => $station['lat'],
@@ -68,4 +73,22 @@ class ApiController extends AbstractController
             'userEmail' => $userEmail,
         ]);
     }
+    #[Route('/add-favorite/{stationId}', name: 'add_favorite')]
+    public function addFavorite(int $stationId, EntityManagerInterface $entityManager, Security $security): JsonResponse
+    {
+        $user = $security->getUser();
+        // To Do : verification user / station
+        //         retirer station si deja favorite
+
+        //push  new Favorite Station to BDD with emailUser
+        $favorite = new StationFav();
+        $favorite->setUserEmail($user->getUserIdentifier());
+        $favorite->setStationId($stationId);
+
+        $entityManager->persist($favorite);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'action' => 'added']);
+    }
+
 }
