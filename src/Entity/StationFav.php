@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\StationFavRepository;
+use Cassandra\Bigint;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StationFavRepository::class)]
@@ -16,7 +17,7 @@ class StationFav
     #[ORM\Column(length: 255)]
     private ?string $userEmail = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'bigint')]
     private ?int $station_id = null;
 
     public function getId(): ?int
