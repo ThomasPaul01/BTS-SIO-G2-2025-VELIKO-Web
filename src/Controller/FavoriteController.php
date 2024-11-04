@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Station;
 use App\Entity\StationFav;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,12 +16,23 @@ class FavoriteController extends AbstractController
     {
         $user = $security->getUser();
 
-        // Récupérer les favoris de l'utilisateur depuis la base de données
+        // Récupérer les favoris de l'utilisateur
         $favorites = $entityManager->getRepository(StationFav::class)
             ->findBy(['userEmail' => $user->getUserIdentifier()]);
 
+        $stations = [];
+        foreach ($favorites as $favorite) {
+            $station = $entityManager->getRepository(Station::class)
+                ->find($favorite->getStationId());
+
+            if ($station) {
+                //remplissage Tableau
+                $stations[] = $station;
+            }
+        }
+
         return $this->render('favorite/index.html.twig', [
-            'favorites' => $favorites,
+            'stations' => $stations,
         ]);
     }
 
@@ -29,7 +41,7 @@ class FavoriteController extends AbstractController
     {
         $user = $security->getUser();
         $favorite = $entityManager->getRepository(StationFav::class)->findOneBy([
-            'stationId' => $stationId,
+            'station_id' => $stationId,
             'userEmail' => $user->getUserIdentifier()
         ]);
 

@@ -114,10 +114,10 @@ class ApiController extends AbstractController
         ]);
 
         if ($existingFavorite) {
-            return new JsonResponse(['error' => 'Station already in favorites'], 400);
+            return new JsonResponse(['message' => 'Station déjà dans les favoris'], 400);
         }
 
-        //push  new Favorite Station to BDD with emailUser
+        // Ajouter une nouvelle station favorite dans la BDD avec l'email de l'utilisateur
         $favorite = new StationFav();
         $favorite->setUserEmail($user->getUserIdentifier());
         $favorite->setStationId($stationId);
@@ -126,11 +126,10 @@ class ApiController extends AbstractController
 
         try {
             $entityManager->flush();
+            return new JsonResponse(['message' => 'Station ajoutée aux favoris', 'type' => 'success'], 200);
         } catch (\Exception $e) {
-            return new JsonResponse(['error' => 'Erreur lors de l\'ajout aux favoris: ' . $e->getMessage()], 500);
+            return new JsonResponse(['message' => 'Erreur lors de l\'ajout aux favoris: ' . $e->getMessage(), 'type' => 'error'], 500);
         }
-
-        return new JsonResponse(['success' => true, 'action' => 'added']);
     }
 
 }

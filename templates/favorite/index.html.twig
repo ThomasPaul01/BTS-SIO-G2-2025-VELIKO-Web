@@ -5,14 +5,34 @@
 {% block content %}
     <h1>Mes Stations Favorites</h1>
 
-    {% if favorites|length > 0 %}
+    {% if stations|length > 0 %}
         <table>
             <thead>
+            <tr>
+                <th>ID de la station</th>
+                <th>Nom de la station</th>
+                <th>Capacité</th>
+            </tr>
             </thead>
             <tbody>
-            {% for favorite in favorites %}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% for station in stations %}
                 <tr>
-                    <td>{{ favorite.stationId }}</td>
+                    <td>{{ station.getStationId() }}</td>
+                    <td>{{ station.getName() }}</td>
+                    <td>{{ station.getCapacity() }}</td>
+                    <td>
+                        <form action="{{ path('remove_favorite', {'stationId': station.getStationId()}) }}" method="post" style="display:inline;">
+                                <button type="submit" id="btn-delete-favorite">Supprimer</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

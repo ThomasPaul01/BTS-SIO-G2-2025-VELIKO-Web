@@ -17,6 +17,7 @@
 
 {% block content %}
     <p>Connecté en tant que : {{ userEmail }}</p>
+    <div id="message" style="display:none; padding: 10px; margin: 10px 0; border-radius: 5px;"></div>
     <div id="map"></div>
 {% endblock %}
 
@@ -94,14 +95,13 @@
         function addToFavorites(stationId) {
             console.log('Tentative d\'ajout de la station aux favoris :', stationId);
             fetch(`/add-favorite/${stationId}`, { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Station ajoutée aux favoris !');
-                    } else {
-                        return response.json().then(data => {
-                            alert('Erreur : ' + (data.error || 'Erreur inconnue.'));
-                        });
-                    }
+                .then(response => response.json())
+                .then(data => {
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.style.display = 'block'; // Affiche le div
+                    messageDiv.innerText = data.message;
+                    messageDiv.style.backgroundColor = data.type === 'success' ? '#4CAF50' : '#f44336'; //couleur
+                    messageDiv.style.color = 'white'; // Texte en blanc
                 })
                 .catch(error => console.error('Erreur:', error));
         }
