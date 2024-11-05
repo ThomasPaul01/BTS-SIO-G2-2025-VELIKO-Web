@@ -30,6 +30,9 @@ class Station
     #[ORM\Column]
     private ?int $electric_bikes = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $lastUpdatedAt = null;
+
     // Getters et Setters...
 
     public function getId(): ?int
@@ -115,6 +118,16 @@ class Station
     {
         $this->electric_bikes = $electric_bikes;
 
+        return $this;
+    }
+    public function getLastUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->lastUpdatedAt;
+    }
+
+    public function setLastUpdatedAt(\DateTimeInterface $lastUpdatedAt): self
+    {
+        $this->lastUpdatedAt = $lastUpdatedAt;
         return $this;
     }
 }
