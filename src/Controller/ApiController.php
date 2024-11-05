@@ -8,8 +8,6 @@ use App\Entity\StationFav;
 use App\Request\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -23,19 +21,24 @@ class ApiController extends AbstractController
 
     }
 
-    #[Route('/map', name: 'fetchVelikoData')]
+    #[Route('/user/map', name: 'fetchVelikoData')]
     public function fetchVelikoData(EntityManagerInterface $entityManager): Response
     {
+        $lastUpdatedStation = $entityManager->getRepository(Station::class)->findOneBy([], ['lastUpdatedAt' => 'DESC']);
 
+        // Vérifiez si les données ont été mises à jour aujourd'hui
+        if ($lastUpdatedStation && $lastUpdatedStation->getLastUpdatedAt() && $lastUpdatedStation->getLastUpdatedAt()->format('Y-m-d') === (new \DateTime())->format('Y-m-d')) {
+            return $this->renderStations($entityManager);
+        }
+
+        // Si les données n'ont pas été mises à jour aujourd'hui, récupérer les nouvelles données depuis l'API
 
         $stationUrl = '/api/stations';
         $statusUrl = '/api/stations/status';
 
         try {
-            // Request Api
             $stations = $this->request->RequestApi($stationUrl);
             $stationStatuses = $this->request->RequestApi($statusUrl);
-
         } catch (\Exception $e) {
             return new Response("Erreur lors de l'appel à l'API: " . $e->getMessage(), 500);
         }
@@ -44,7 +47,6 @@ class ApiController extends AbstractController
             $stationId = $station['station_id'];
             foreach ($stationStatuses as $stationStatus) {
                 if ($stationId == $stationStatus['station_id']) {
-                    // Vérifiez si la station existe déjà dans la base de données
                     $existingStation = $entityManager->getRepository(Station::class)->findOneBy(['station_id' => $stationId]);
 
                     if (!$existingStation) {
@@ -56,17 +58,17 @@ class ApiController extends AbstractController
                         $stationEntity->setLon($station['lon']);
                         $stationEntity->setMechanicalBikes($stationStatus['num_bikes_available_types'][0]['mechanical'] ?? 0);
                         $stationEntity->setElectricBikes($stationStatus['num_bikes_available_types'][1]['ebike'] ?? 0);
+                        $stationEntity->setLastUpdatedAt(new \DateTime());
 
                         $entityManager->persist($stationEntity);
                     } else {
-                        // Vous pouvez mettre à jour les informations si la station existe déjà
                         $existingStation->setCapacity($station['capacity']);
                         $existingStation->setLat($station['lat']);
                         $existingStation->setLon($station['lon']);
                         $existingStation->setMechanicalBikes($stationStatus['num_bikes_available_types'][0]['mechanical'] ?? 0);
                         $existingStation->setElectricBikes($stationStatus['num_bikes_available_types'][1]['ebike'] ?? 0);
+                        $existingStation->setLastUpdatedAt(new \DateTime());
                     }
-
                     break;
                 }
             }
@@ -74,10 +76,19 @@ class ApiController extends AbstractController
 
         $entityManager->flush();
 
-        // Récupérer toutes les stations de la base de données
+        return $this->renderStations($entityManager);
+    }
+
+// Méthode pour rendre les données de la carte sans recharger l'API
+    private function renderStations(EntityManagerInterface $entityManager): Response
+    {
         $allStations = $entityManager->getRepository(Station::class)->findAll();
 
-        // Créer le tableau de données à envoyer au template
+        $user = $this->getUser();
+        $userEmail = $user?->getUserIdentifier();
+        $favorites = $entityManager->getRepository(StationFav::class)->findBy(['userEmail' => $userEmail]);
+        $favoriteStationIds = array_map(fn($fav) => $fav->getStationId(), $favorites);
+
         $stationsData = [];
         foreach ($allStations as $station) {
             $stationsData[] = [
@@ -88,48 +99,14 @@ class ApiController extends AbstractController
                 'lon' => $station->getLon(),
                 'mechanical_bikes' => $station->getMechanicalBikes(),
                 'electric_bikes' => $station->getElectricBikes(),
+                'is_favorite' => in_array($station->getStationId(), $favoriteStationIds),
             ];
         }
-
-        // Récupérer l'email de l'utilisateur
-        $user = $this->getUser();
-        $userEmail = $user?->getUserIdentifier();
-
 
         return $this->render('api/index.html.twig', [
             'stations' => $stationsData,
             'userEmail' => $userEmail,
         ]);
-    }
-
-
-    #[Route('/add-favorite/{stationId}', name: 'add_favorite')]
-    public function addFavorite(int $stationId, EntityManagerInterface $entityManager, Security $security): JsonResponse
-    {
-        $user = $security->getUser();
-
-        $existingFavorite = $entityManager->getRepository(StationFav::class)->findOneBy([
-            'station_id' => $stationId,
-            'userEmail' => $user->getUserIdentifier()
-        ]);
-
-        if ($existingFavorite) {
-            return new JsonResponse(['message' => 'Station déjà dans les favoris'], 400);
-        }
-
-        // Ajouter une nouvelle station favorite dans la BDD avec l'email de l'utilisateur
-        $favorite = new StationFav();
-        $favorite->setUserEmail($user->getUserIdentifier());
-        $favorite->setStationId($stationId);
-
-        $entityManager->persist($favorite);
-
-        try {
-            $entityManager->flush();
-            return new JsonResponse(['message' => 'Station ajoutée aux favoris', 'type' => 'success'], 200);
-        } catch (\Exception $e) {
-            return new JsonResponse(['message' => 'Erreur lors de l\'ajout aux favoris: ' . $e->getMessage(), 'type' => 'error'], 500);
-        }
     }
 
 }
