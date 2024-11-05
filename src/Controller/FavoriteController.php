@@ -5,13 +5,14 @@ use App\Entity\Station;
 use App\Entity\StationFav;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class FavoriteController extends AbstractController
 {
-    #[Route('/favorite', name: 'app_favorite')]
+    #[Route('/user/favorite', name: 'app_favorite')]
     public function index(EntityManagerInterface $entityManager, Security $security): Response
     {
         $user = $security->getUser();
@@ -36,8 +37,37 @@ class FavoriteController extends AbstractController
         ]);
     }
 
-    #[Route('/remove-favorite/{stationId}', name: 'remove_favorite', methods: ['POST'])]
-    public function removeFavorite(int $stationId, EntityManagerInterface $entityManager, Security $security): Response
+    #[Route('/user/add-favorite/{stationId}', name: 'add_favorite')]
+    public function addFavorite(int $stationId, EntityManagerInterface $entityManager, Security $security): JsonResponse
+    {
+        $user = $security->getUser();
+
+        $existingFavorite = $entityManager->getRepository(StationFav::class)->findOneBy([
+            'station_id' => $stationId,
+            'userEmail' => $user->getUserIdentifier()
+        ]);
+
+        if ($existingFavorite) {
+            return new JsonResponse(['message' => 'Station déjà dans les favoris'], 400);
+        }
+
+        // Ajouter une nouvelle station favorite dans la BDD avec l'email de l'utilisateur
+        $favorite = new StationFav();
+        $favorite->setUserEmail($user->getUserIdentifier());
+        $favorite->setStationId($stationId);
+
+        $entityManager->persist($favorite);
+
+        try {
+            $entityManager->flush();
+            return new JsonResponse(['message' => 'Station ajoutée aux favoris', 'type' => 'success'], 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['message' => 'Erreur lors de l\'ajout aux favoris: ' . $e->getMessage(), 'type' => 'error'], 500);
+        }
+    }
+
+    #[Route('/user/remove-favorite/{stationId}', name: 'remove_favorite', methods: ['POST'])]
+    public function removeFavorite(int $stationId, EntityManagerInterface $entityManager, Security $security): JsonResponse
     {
         $user = $security->getUser();
         $favorite = $entityManager->getRepository(StationFav::class)->findOneBy([
@@ -47,13 +77,13 @@ class FavoriteController extends AbstractController
 
         if ($favorite) {
             $entityManager->remove($favorite);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Station retirée des favoris.');
-        } else {
-            $this->addFlash('error', 'Station non trouvée dans vos favoris.');
         }
 
-        return $this->redirectToRoute('app_favorite');
+        try {
+            $entityManager->flush();
+            return new JsonResponse(['message' => 'Station '.$stationId.' retirée des favoris.', 'type' => 'success'], 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['message' => 'Erreur lors de la suppression des favoris: ' . $e->getMessage(), 'type' => 'error'], 500);
+        }
     }
 }

@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Security;
 
 class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'app_profile')]
+    #[Route('user/profile', name: 'app_profile')]
     public function profile(Security $security, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Récupère l'utilisateur actuellement connecté

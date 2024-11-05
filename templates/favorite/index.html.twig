@@ -4,6 +4,7 @@
 
 {% block content %}
     <h1>Mes Stations Favorites</h1>
+    <div id="message" style="display:none; padding: 10px; margin: 10px 0; border-radius: 5px;"></div>
 
     {% if stations|length > 0 %}
         <table>
@@ -12,6 +13,7 @@
                 <th>ID de la station</th>
                 <th>Nom de la station</th>
                 <th>Capacité</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -29,9 +31,7 @@
                     <td>{{ station.getName() }}</td>
                     <td>{{ station.getCapacity() }}</td>
                     <td>
-                        <form action="{{ path('remove_favorite', {'stationId': station.getStationId()}) }}" method="post" style="display:inline;">
-                                <button type="submit" id="btn-delete-favorite">Supprimer</button>
-                        </form>
+                        <button class="btn-delete-favorite" onclick="removeFromFavorites({{ station.getStationId() }})">Supprimer</button>
                     </td>
                 </tr>
             {% endfor %}
@@ -40,4 +40,34 @@
     {% else %}
         <p>Aucune station en favoris.</p>
     {% endif %}
+
+    <div id="message" style="display: none;"></div>
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        function removeFromFavorites(stationId) {
+            console.log('Tentative de suppression de la station des favoris :', stationId);
+            fetch(`/user/remove-favorite/${stationId}`, { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la suppression du favori');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.style.display = 'block';
+                    messageDiv.innerText = data.message;
+                    messageDiv.style.backgroundColor = data.type === 'success' ? '#4CAF50' : '#f44336';
+                    messageDiv.style.color = 'white';
+
+                    // Retirer la ligne de la table si la suppression réussie
+                    const row = document.querySelector(`button[onclick="removeFromFavorites(${stationId})"]`).closest('tr');
+                    row.remove();
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+    </script>
 {% endblock %}
