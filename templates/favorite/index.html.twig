@@ -3,49 +3,54 @@
 {% block title %}Mes Favoris{% endblock %}
 
 {% block content %}
-    <h1>Mes Stations Favorites</h1>
+    <h1 class="text-center my-4">Mes Stations Favorites</h1>
+
     <div id="message" style="display:none; padding: 10px; margin: 10px 0; border-radius: 5px;"></div>
 
     {% if stations|length > 0 %}
-        <table>
-            <thead>
-            <tr>
-                <th>ID de la station</th>
-                <th>Nom de la station</th>
-                <th>Capacité</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-
-            {% for station in stations %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead style="background-color: #28a745; color: white;">
                 <tr>
-                    <td>{{ station.getStationId() }}</td>
-                    <td>{{ station.getName() }}</td>
-                    <td>{{ station.getCapacity() }}</td>
-                    <td>
-                        <button class="btn-delete-favorite" onclick="removeFromFavorites({{ station.getStationId() }})">Supprimer</button>
-                    </td>
+                    <th>Nom de la station</th>
+                    <th>Capacité</th>
+                    <th>Velo mécanique</th>
+                    <th>Velo electrique</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Aucune station en favoris.</p>
-    {% endif %}
+                </thead>
+                <tbody>
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} my-2">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
 
-    <div id="message" style="display: none;"></div>
+                {% for station in stations %}
+                    <tr>
+                        <td>{{ station.getName() }}</td>
+                        <td>{{ station.getCapacity() }}</td>
+                        <td>{{ station.getMechanicalBikes }}</td>
+                        <td>{{ station.getElectricBikes }}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="removeFromFavorites({{ station.getStationId() }})">
+                                <i class="fas fa-trash-alt"></i> Supprimer
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center text-muted">Aucune station en favoris.</p>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script>
         function removeFromFavorites(stationId) {
             console.log('Tentative de suppression de la station des favoris :', stationId);
@@ -62,6 +67,7 @@
                     messageDiv.innerText = data.message;
                     messageDiv.style.backgroundColor = data.type === 'success' ? '#4CAF50' : '#f44336';
                     messageDiv.style.color = 'white';
+                    messageDiv.style.marginBottom = '15px';
 
                     // Retirer la ligne de la table si la suppression réussie
                     const row = document.querySelector(`button[onclick="removeFromFavorites(${stationId})"]`).closest('tr');

@@ -94,51 +94,44 @@
     <div class="form-container">
         <h1>Register</h1>
 
+
         {{ form_start(registrationForm) }}
 
         <div class="form-group">
             {{ form_row(registrationForm.email) }}
-            {{ form_errors(registrationForm.email) }}
         </div>
 
         <div class="form-group">
             {{ form_row(registrationForm.firstName) }}
-            {{ form_errors(registrationForm.firstName) }}
         </div>
 
         <div class="form-group">
             {{ form_row(registrationForm.name) }}
-            {{ form_errors(registrationForm.name) }}
+
         </div>
 
         <div class="form-group">
             {{ form_row(registrationForm.birthdate) }}
-            {{ form_errors(registrationForm.birthdate) }}
         </div>
 
         <div class="form-group">
             {{ form_row(registrationForm.address) }}
-            {{ form_errors(registrationForm.address) }}
         </div>
 
         <div class="form-group">
             {{ form_row(registrationForm.postalCode) }}
-            {{ form_errors(registrationForm.postalCode) }}
         </div>
 
         <div class="form-group">
             {{ form_row(registrationForm.city) }}
-            {{ form_errors(registrationForm.city) }}
         </div>
 
         <div class="form-group">
             {{ form_row(registrationForm.agreeTerms) }}
-            {{ form_errors(registrationForm.agreeTerms) }}
         </div>
 
         <div class="form-group">
             {{ form_row(registrationForm.plainPassword) }}
-            {{ form_errors(registrationForm.plainPassword) }}
         </div>
 
         <button type="submit" class="btn">Register</button>

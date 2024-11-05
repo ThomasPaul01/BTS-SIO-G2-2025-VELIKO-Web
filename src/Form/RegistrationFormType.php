@@ -24,60 +24,25 @@ class RegistrationFormType extends AbstractType
 
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre prénom',
-                    ]),
-                ],
             ])
-            ->add('name', TextType::class, [  // Correction ici
+            ->add('name', TextType::class, [
                 'label' => 'Nom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre nom',
-                    ]),
-                ],
             ])
             ->add('birthdate', DateType::class, [
                 'label' => 'Date de naissance',
                 'widget' => 'single_text', // Affiche un champ date sans sélecteur de date
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre date de naissance',
-                    ]),
-                ],
             ])
             ->add('address', TextareaType::class, [
                 'label' => 'Adresse',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre adresse',
-                    ]),
-                ],
             ])
             ->add('postalCode', TextType::class, [
                 'label' => 'Code postal',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre code postal',
-                    ]),
-                ],
             ])
             ->add('city', TextType::class, [
                 'label' => 'Ville',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre ville',
-                    ]),
-                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter nos termes.',
-                    ]),
-                ],
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
