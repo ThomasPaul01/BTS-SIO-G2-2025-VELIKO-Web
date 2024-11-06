@@ -12,7 +12,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: app_db
-      #MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_ROOT_PASSWORD: root
       TZ: Europe/Paris
     volumes:
@@ -34,3 +34,13 @@ services:
       - database
     depends_on:
       - database
+
+  mailer:
+    container_name: poc-veliko-mailer
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1

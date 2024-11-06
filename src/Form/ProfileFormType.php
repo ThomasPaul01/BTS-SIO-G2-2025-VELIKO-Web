@@ -44,3 +44,4 @@ class ProfileFormType extends AbstractType
         ]);
     }
 }
+

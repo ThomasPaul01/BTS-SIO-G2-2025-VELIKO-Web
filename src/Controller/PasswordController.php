@@ -37,7 +37,7 @@ class PasswordController extends AbstractController
                 $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
 
                 // Renvoie à la vue avec les messages d'erreur
-                return $this->render('password/change_password.html.twig', [
+                return $this->render('password/index.html.twig', [
                     'changePasswordForm' => $form->createView(),
                 ]);
             }
@@ -56,7 +56,7 @@ class PasswordController extends AbstractController
         }
 
         // Rends la vue avec le formulaire
-        return $this->render('password/change_password.html.twig', [
+        return $this->render('password/index.html.twig', [
             'changePasswordForm' => $form->createView(),
         ]);
     }

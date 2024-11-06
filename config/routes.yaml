@@ -6,4 +6,8 @@ controllers:
 
 # config/routes.yaml
 
+app_confirm_email:
+    path: /confirm-email/{token}
+    controller: App\Controller\EmailConfirmationController::confirmEmail
+
 

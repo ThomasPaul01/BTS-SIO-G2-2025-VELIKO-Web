@@ -1,0 +1,29 @@
+{#
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation d'Inscription{% endblock %}
+
+{% block content %}
+    <style>
+        .profile-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .confirmation-message {
+            color: #4CAF50;
+            font-size: 1.2em;
+        }
+    </style>
+
+    <div class="profile-container">
+        <h2>Merci pour votre inscription !</h2>
+
+        <p class="confirmation-message">
+            Un e-mail de confirmation vous a été envoyé à l'adresse {{ user.email }}.
+            Veuillez vérifier votre boîte de réception et cliquer sur le lien de confirmation pour activer votre compte.
+        </p>
+
+        <p>Si vous n'avez pas reçu l'e-mail, pensez à vérifier vos spams ou <a href="{{ path('app_register') }}">essayez de vous réinscrire</a>.</p>
+    </div>
+{% endblock %}
+lock %}#}
