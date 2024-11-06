@@ -15,11 +15,11 @@ class IsEmailValideValidator extends ConstraintValidator
             return;
         }
 
-        // Vérifie si l'adresse contient un '@' et si elle est bien formée avec un domaine
+        // Vérifie si l'adresse contient un '@' et un "." apres
         if (str_contains($value, '@')) {
             $parts = explode('@', $value);
 
-            if (isset($parts[1]) && str_contains($parts[1], 'mail.dev')) {
+            if (isset($parts[1]) && str_contains($parts[1], '.')) {
                 return ;
             }
         }
