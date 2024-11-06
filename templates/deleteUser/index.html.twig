@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suppression de Compte{% endblock %}
+
+{% block content %}
+    <style>
+        .delete-account-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .delete-account-container h1 {
+            font-size: 24px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .delete-account-container p {
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+            padding: 8px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .info-item label {
+            font-weight: bold;
+            color: #333;
+            width: 40%;  /* largeur fixe pour un bon alignement */
+            text-align: left;
+        }
+
+        .info-item span {
+            color: #555;
+            width: 55%; /* largeur pour aligner les valeurs */
+            text-align: right;
+        }
+
+        .btn-confirm {
+            width: 100%;
+            padding: 12px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-confirm:hover {
+            background-color: #c82333;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="delete-account-container">
+        <h1>Confirmer la Suppression de Votre Compte</h1>
+
+        <p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
+
+        <form method="post">
+            <div class="info-item">
+                <label>Email :</label>
+                <span>{{ user.email }} (anonymisé)</span>
+            </div>
+            <div class="info-item">
+                <label>Nom :</label>
+                <span>{{ user.name }} (anonymisé)</span>
+            </div>
+            <div class="info-item">
+                <label>Prénom :</label>
+                <span>{{ user.firstName }} (anonymisé)</span>
+            </div>
+            <div class="info-item">
+                <label>Date de Naissance :</label>
+                <span>{{ user.birthdate ? user.birthdate|date('d/m/Y') : '' }} (conservé pour statistiques)</span>
+            </div>
+            <div class="info-item">
+                <label>Adresse :</label>
+                <span>{{ user.address }} (anonymisé)</span>
+            </div>
+            <div class="info-item">
+                <label>Code Postal :</label>
+                <span>{{ user.postalCode }} (conservé pour statistiques)</span>
+            </div>
+            <div class="info-item">
+                <label>Ville :</label>
+                <span>{{ user.city }} (conservé pour statistiques)</span>
+            </div>
+
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_account') }}">
+            <button type="submit" class="btn-confirm">Confirmer la Suppression</button>
+        </form>
+
+        <a href="{{ path('app_profile') }}" class="btn-back">Retour au Profil</a>
+    </div>
+{% endblock %}

@@ -4,7 +4,6 @@
 
 {% block content %}
     <style>
-        /* Styles généraux pour le conteneur principal */
         .profile-container {
             max-width: 600px;
             margin: 50px auto;
@@ -25,7 +24,6 @@
             margin-bottom: 20px;
         }
 
-        /* Styles pour les labels */
         label {
             font-weight: bold;
             margin-bottom: 5px;
@@ -33,7 +31,6 @@
             color: #333;
         }
 
-        /* Styles pour les champs de saisie */
         input[type="text"],
         input[type="email"],
         input[type="password"],
@@ -52,7 +49,6 @@
             outline: none;
         }
 
-        /* Styles pour les boutons */
         .btn-primary {
             width: 100%;
             padding: 12px;
@@ -69,7 +65,38 @@
             background-color: #0056b3;
         }
 
-        /* Messages de succès ou d'erreur */
+        /* Bouton de modification du mot de passe */
+        .btn-password {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            width: 48%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-password:hover {
+            background-color: #218838;
+        }
+
+        /* Bouton de suppression de compte */
+        .btn-delete {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            width: 48%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
         .alert {
             margin-bottom: 20px;
             padding: 15px;
@@ -83,22 +110,17 @@
             border: 1px solid #c3e6cb;
         }
 
-        /* Affichage en grille pour les boutons */
+        /* Conteneur pour les boutons en bas de la page */
         .btn-container {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
-        }
-
-        .btn-container button {
-            width: 48%;
         }
     </style>
 
     <div class="profile-container">
         <h2>Mon Profil</h2>
 
-        {# Affiche un message de succès si l'utilisateur a mis à jour ses informations #}
         {% for message in app.flashes('success') %}
             <div class="alert alert-success">
                 {{ message }}
@@ -106,7 +128,6 @@
         {% endfor %}
 
         {{ form_start(profileForm) }}
-
 
         <div class="form-group">
             {{ form_row(profileForm.firstName) }}
@@ -136,21 +157,13 @@
             <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
         </div>
 
-        <li>
-            <a href="/change-password">Modifier le mot de passe</a>
-        </li>
-
         {{ form_end(profileForm) }}
 
 
-        {% for label, messages in app.flashes %}
-            <div class="alert alert-{{ label }}">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endfor %}
-
+        <div class="btn-container">
+            <button type="button" class="btn-password" onclick="window.location.href='/change-password'">Modifier le mot de passe</button>
+            <button type="button" class="btn-delete" onclick="window.location.href='/user/profile/delete'">Supprimer mon compte</button>
+        </div>
 
     </div>
 {% endblock %}
