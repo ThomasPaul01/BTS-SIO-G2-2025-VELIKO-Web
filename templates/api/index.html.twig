@@ -16,7 +16,11 @@
 {% endblock %}
 
 {% block content %}
-    <p>Connecté en tant que : {{ userEmail }}</p>
+    {% if app.user %}
+        <div class="text-muted text-center mb-3 small">
+            Connecté en tant que : <strong>{{ app.user.userIdentifier }}</strong>
+        </div>
+    {% endif %}
     <div id="message" style="display:none; padding: 10px; margin: 10px 0; border-radius: 5px;"></div>
     <div id="map"></div>
 {% endblock %}
@@ -64,9 +68,10 @@
                 stations.forEach(function(station) {
                     // Verifier si Favoris et mettre les informations en fonction
                     var isFavorite = station.is_favorite;
+                    var buttonId = 'favorite-btn-' + station.station_id;
                     var buttonLabel = isFavorite ? 'Supprimer des favoris' : 'Ajouter aux favoris';
-                    var buttonAction = isFavorite ? 'removeFromFavorites(' + station.station_id + ')' : 'addToFavorites(' + station.station_id + ')';
                     var icon = isFavorite ? '⭐' : '☆';
+                    var buttonAction = isFavorite ? 'removeFromFavorites' : 'addToFavorites';
 
                     var marker = L.marker([station.lat, station.lon])
                         .bindPopup(
@@ -74,7 +79,7 @@
                             "<br>Capacité : " + station.capacity +
                             "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
                             "<br>Vélos électriques disponibles : " + station.electric_bikes +
-                            "<br><span>" + icon + "</span> <button onclick='" + buttonAction + "'>" + buttonLabel + "</button>"
+                            `<br><span id='icon-${station.station_id}'>${icon}</span> <button id="${buttonId}" onclick="${buttonAction}(${station.station_id})">${buttonLabel}</button>`
                         );
 
                     // Afficher info durant un survol
@@ -84,11 +89,10 @@
                             "<br>Capacité : " + station.capacity +
                             "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
                             "<br>Vélos électriques disponibles : " + station.electric_bikes +
-                            "<br><span>" + icon + "</span> <button onclick='" + buttonAction + "'>" + buttonLabel + "</button>"
+                            `<br><span id='icon-${station.station_id}'>${icon}</span> <button id="${buttonId}" onclick="${buttonAction}(${station.station_id})">${buttonLabel}</button>`
                         ).openPopup();
                     });
 
-                    // Ajouter le marqueur au groupe de marqueurs
                     markers.addLayer(marker);
                 });
             }
@@ -101,41 +105,51 @@
             map.addLayer(markers);
         }
 
+        //Ajouter la Station en favorite avec son id
         function addToFavorites(stationId) {
-            console.log('Tentative d\'ajout de la station aux favoris :', stationId);
             fetch(`/user/add-favorite/${stationId}`, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
-                    const messageDiv = document.getElementById('message');
-                    messageDiv.style.display = 'block'; // Affiche le div
-                    messageDiv.innerText = data.message;
-                    messageDiv.style.backgroundColor = data.type === 'success' ? '#4CAF50' : '#f44336'; //couleur
-                    messageDiv.style.color = 'white'; // Texte en blanc
-
-                    // Rafraîchir la page après avoir laissé l'utilisateur lire le message pour mettre à jour les pop-up
-                    setTimeout(() => location.reload(), 500);
+                    if (data.type === 'success') {
+                        const button = document.getElementById('favorite-btn-' + stationId);
+                        const icon = document.getElementById('icon-' + stationId);
+                        button.innerHTML = 'Supprimer des favoris';
+                        icon.innerHTML = '⭐'; // Change l'icône en étoile pleine
+                        button.setAttribute('onclick', 'removeFromFavorites(' + stationId + ')');
+                    }
+                    showMessage(data.message, data.type);
                 })
                 .catch(error => console.error('Erreur:', error));
-            console.log("passage")
         }
 
+        //Supprimer la station en fonction de son id
         function removeFromFavorites(stationId) {
-            console.log('Tentative de suppression de la station des favoris :', stationId);
             fetch(`/user/remove-favorite/${stationId}`, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
-                    const messageDiv = document.getElementById('message');
-                    messageDiv.style.display = 'block'; // Affiche le div
-                    messageDiv.innerText = data.message;
-                    messageDiv.style.backgroundColor = data.type === 'success' ? '#4CAF50' : '#f44336'; // couleur
-                    messageDiv.style.color = 'white'; // Texte en blanc
-
-                    // Rafraîchir la page après avoir laissé l'utilisateur lire le message pour mettre à jour les pop-up
-                    setTimeout(() => location.reload(), 500);
+                    if (data.type === 'success') {
+                        const button = document.getElementById('favorite-btn-' + stationId);
+                        const icon = document.getElementById('icon-' + stationId);
+                        button.innerHTML = 'Ajouter aux favoris';
+                        icon.innerHTML = '☆'; // Change l'icône en étoile vide
+                        button.setAttribute('onclick', 'addToFavorites(' + stationId + ')');
+                    }
+                    showMessage(data.message, data.type);
                 })
                 .catch(error => console.error('Erreur:', error));
         }
 
+        //afficher message pour tous les cas
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.style.display = 'block';
+            messageDiv.innerText = message;
+            messageDiv.style.backgroundColor = type === 'success' ? '#4CAF50' : '#f44336';
+            messageDiv.style.color = 'white';
+            setTimeout(() => messageDiv.style.display = 'none', 3000);
+        }
+
         window.onload = initMap;
+
     </script>
 {% endblock %}

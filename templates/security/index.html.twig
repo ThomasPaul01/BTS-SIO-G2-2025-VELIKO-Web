@@ -10,8 +10,8 @@
 {#        {% endif %}#}
 
         {% if app.user %}
-            <div class="mb-3">
-                Connecté en tant que : {{ app.user.userIdentifier }}
+            <div class="alert alert-info text-center mb-4">
+                Connecté en tant que : <strong>{{ app.user.userIdentifier }}</strong>
             </div>
         {% endif %}
 
