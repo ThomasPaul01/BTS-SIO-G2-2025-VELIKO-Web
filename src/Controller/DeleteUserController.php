@@ -13,9 +13,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class DeleteUserController extends AbstractController
 {
     #[Route('/user/profile/delete', name: 'app_delete_user', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
     public function deleteAccount(Request $request, EntityManagerInterface $entityManager): Response
     {
+        //vérifier si l'utilisateur est un utilisateur pour ne pas pouvoir supprimer un compte admin
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Impossible de supprimer un compte administrateur.');
+            return $this->redirectToRoute('app_profile');
+        }
+
         $user = $this->getUser();
 
         // Affichage de la page de confirmation si la méthode est GET
