@@ -33,6 +33,8 @@ class AppFixtures extends Fixture
         $user->setFirstName("Admin");
         $date=new \DateTime("2025-01-01");
         $user->setBirthdate($date);
+        $user->setVerified(true);
+
         $manager->persist($user);
 
         // Standard users
@@ -46,8 +48,10 @@ class AppFixtures extends Fixture
             $user->setPostalCode("00000");
             $user->setCity("Paris");
             $user->setFirstName("user");
-            $date=new \DateTime("2025-01-01");
+            $date=new \DateTime("2000-01-01");
             $user->setBirthdate($date);
+            $user->setVerified(true);
+
             $manager->persist($user);
         }
 

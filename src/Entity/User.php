@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Validator\IsAdult;
 use App\Validator\IsEmailValide;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -46,6 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank(message: 'La date de naissance est requise.')]
+    #[IsAdult]
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column(type: Types::STRING)]
