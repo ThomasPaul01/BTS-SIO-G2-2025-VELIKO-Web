@@ -12,6 +12,36 @@
             height: 500px;
             width: 100%;
         }
+        .favorite-btn {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 4px 8px;  /* Réduction de la taille du padding */
+            border-radius: 5px;
+            font-size: 12px;  /* Réduction de la taille de la police */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre subtile */
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .favorite-btn span.icon {
+            font-size: 14px;  /* Réduction de la taille de l'icône */
+            margin-right: 6px;  /* Ajustement de l'espace autour de l'icône */
+        }
+
+        .favorite-btn:hover {
+            background-color: #e68900; /* Assombrir au survol */
+            transform: translateY(-2px); /* Léger effet de soulèvement */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée */
+        }
+
+        .favorite-btn:active {
+            transform: translateY(1px); /* Effet enfoncé au clic */
+        }
+
     </style>
 {% endblock %}
 
@@ -63,7 +93,6 @@
             var stations = {{ stations|json_encode()|raw }};
 
             // Afficher Station et Information sur celle-ci
-
             if (Array.isArray(stations)) {
                 stations.forEach(function(station) {
                     // Verifier si Favoris et mettre les informations en fonction
@@ -74,22 +103,18 @@
                     var buttonAction = isFavorite ? 'removeFromFavorites' : 'addToFavorites';
 
                     var marker = L.marker([station.lat, station.lon])
-                        .bindPopup(
-                            "Nom : " + station.name +
-                            "<br>Capacité : " + station.capacity +
-                            "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
-                            "<br>Vélos électriques disponibles : " + station.electric_bikes +
-                            `<br><span id='icon-${station.station_id}'>${icon}</span> <button id="${buttonId}" onclick="${buttonAction}(${station.station_id})">${buttonLabel}</button>`
-                        );
+
 
                     // Afficher info durant un survol
                     marker.on('mouseover', function() {
                         marker.bindPopup(
-                            "Nom : " + station.name +
-                            "<br>Capacité : " + station.capacity +
-                            "<br>Vélos mécaniques disponibles : " + station.mechanical_bikes +
-                            "<br>Vélos électriques disponibles : " + station.electric_bikes +
-                            `<br><span id='icon-${station.station_id}'>${icon}</span> <button id="${buttonId}" onclick="${buttonAction}(${station.station_id})">${buttonLabel}</button>`
+                            "<b>Nom :</b> " + station.name +
+                            "<br><b>Capacité totale : </b>" + station.capacity +
+                            "<br><img src='/images/icone-velonoir.png' alt='icone-Evole' width='35'>Vélos mécaniques disponibles : " + station.mechanical_bikes +
+                            "<br><img src='/images/icone-Evelo.png' alt='icone-Evole' width='40'>Vélos électriques disponibles : " + station.electric_bikes +
+                            `<br><button id="${buttonId}" class="favorite-btn" onclick="${buttonAction}(${station.station_id})">
+                                <span class="icon">${icon}</span> ${buttonLabel}
+                             </button>`
                         ).openPopup();
                     });
 
@@ -112,9 +137,7 @@
                 .then(data => {
                     if (data.type === 'success') {
                         const button = document.getElementById('favorite-btn-' + stationId);
-                        const icon = document.getElementById('icon-' + stationId);
-                        button.innerHTML = 'Supprimer des favoris';
-                        icon.innerHTML = '⭐'; // Change l'icône en étoile pleine
+                        button.innerHTML = '<span class="icon">⭐</span> Supprimer des favoris';
                         button.setAttribute('onclick', 'removeFromFavorites(' + stationId + ')');
                     }
                     showMessage(data.message, data.type);
@@ -129,9 +152,7 @@
                 .then(data => {
                     if (data.type === 'success') {
                         const button = document.getElementById('favorite-btn-' + stationId);
-                        const icon = document.getElementById('icon-' + stationId);
-                        button.innerHTML = 'Ajouter aux favoris';
-                        icon.innerHTML = '☆'; // Change l'icône en étoile vide
+                        button.innerHTML = '<span class="icon">☆</span> Ajouter aux favoris';
                         button.setAttribute('onclick', 'addToFavorites(' + stationId + ')');
                     }
                     showMessage(data.message, data.type);

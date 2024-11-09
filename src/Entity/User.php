@@ -52,18 +52,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank(message: "L'adresse est requise.")]
-    #[Assert\Length(min: 10, max: 100, minMessage: 'L\'adresse doit comporter au moins 10 caractères.', maxMessage: 'L\'adresse doit comporter au maximum 100 caractères.')]
+    #[Assert\Length(min: 10, max: 100, minMessage: 'Un adresse de moins de 10 caractères ???', maxMessage: 'L\'adresse doit comporter au maximum 100 caractères.')]
+    #[Assert\Regex(pattern: '/^\d+\s[a-zA-Z]+(?:\s[a-zA-Z]+)*$/', message: "L'adresse doit avoir le bon format (ex: '11 av montreuil')")]
     private ?string $address = null;
 
     #[ORM\Column(type: Types::INTEGER)]
     #[Assert\NotBlank(message: 'Le code postal est requis.')]
     #[Assert\Positive(message: 'Le code postal doit être un nombre positif.')]
-    #[Assert\Regex(pattern: '/^\d{5}$/', message: 'Le code postal doit être composé de 5 chiffres.')]
+    #[Assert\Regex(pattern: '/^\d{5}$/', message: "Le code postal doit avoir le bon format (ex: '77000')")]
     private ?string $postalCode = null;
 
     #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank(message: 'La ville est requise.')]
-    #[Assert\Length(min: 2, max: 50, minMessage: 'Le nom de la ville doit comporter au moins 2 caractères.', maxMessage: 'Le nom de la ville doit comporter au maximum 50 caractères.')]
+    #[Assert\Length(min: 1, max: 50, minMessage: 'Le nom de la ville doit comporter au moins 2 caractères.', maxMessage: 'Le nom de la ville doit comporter au maximum 50 caractères.')]
     #[Assert\Regex(pattern: '/^[a-zA-ZÀ-ÿ\s\-]+$/', message: 'Le nom de la ville est invalide.')]
     private ?string $city = null;
 
