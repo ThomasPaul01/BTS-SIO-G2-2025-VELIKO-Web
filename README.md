@@ -1,4 +1,4 @@
-# Projet Veliko
+# Projet Veliko 
 
 ## Installation 
 
@@ -16,16 +16,20 @@ composer install
 
 ### Etape 3 : Initialisation du fichier
 
-1. Transfomer le **.env-example** en **.env** pour configurer vos variables locales
+ 1. Transformer le **.env-example** en **.env** pour configurer vos variables locales
 
-2. Modifiez les variables dans .env selon votre environnement local.
+2. Modifiez les variables dans .env selon votre environnement local
+
+⚠️ Obligatoire : 
+   - APP_SECRET
+   - DATABASE_URL
 
 ### Etape 4 : Installation BDD
-creation, lancement des containers
+Création, lancement des containers
 ```
 docker-compose up -d
 ```
-Executez la migration
+Exécutez la migration
 ```
 symfony console doctrine:migrations:migrate
 ```
@@ -40,7 +44,14 @@ Pour arreter le serveur
 ```
 symfony server:stop
 ```
-Arreter containers and supprime containers
-```
+Arreter containers and supprimer containers
+``` 
 docker-compose down
 ```
+### 🎁Bonus : AppFixtures
+Si besoin de creer automatiquement des users dans la base de donne :
+```
+symfony console doctrine:fixtures:load
+```
+
+
