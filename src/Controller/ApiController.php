@@ -21,14 +21,15 @@ class ApiController extends AbstractController
 
     }
 
-    #[Route('/user/map', name: 'fetchVelikoData')]
+    #[Route('/', name: 'fetchVelikoData')]
     public function fetchVelikoData(EntityManagerInterface $entityManager): Response
     {
         $lastUpdatedStation = $entityManager->getRepository(Station::class)->findOneBy([], ['lastUpdatedAt' => 'DESC']);
 
         // Vérifiez si les données ont été mises à jour aujourd'hui
         if ($lastUpdatedStation && $lastUpdatedStation->getLastUpdatedAt() && $lastUpdatedStation->getLastUpdatedAt()->format('Y-m-d') === (new \DateTime())->format('Y-m-d')) {
-            return $this->renderStations($entityManager);
+            return $this->redirectToRoute('app_login');
+
         }
 
         // Si les données n'ont pas été mises à jour aujourd'hui, récupérer les nouvelles données depuis l'API
@@ -76,11 +77,13 @@ class ApiController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->renderStations($entityManager);
+        return $this->redirectToRoute('app_login');
+
     }
 
 // Méthode pour rendre les données de la carte sans recharger l'API
-    private function renderStations(EntityManagerInterface $entityManager): Response
+    #[Route('/user/map', name: 'initMap')]
+    public function renderStations(EntityManagerInterface $entityManager): Response
     {
         $allStations = $entityManager->getRepository(Station::class)->findAll();
 
