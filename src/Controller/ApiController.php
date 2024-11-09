@@ -106,7 +106,7 @@ class ApiController extends AbstractController
             ];
         }
 
-        return $this->render('api/index.html.twig', [
+        return $this->render('map/index.html.twig', [
             'stations' => $stationsData,
             'userEmail' => $userEmail,
         ]);
