@@ -14,7 +14,13 @@ Installation des dépendances avec composer(vendor)
 composer install
 ```
 
-### Etape 3 : Installation BDD
+### Etape 3 : Initialisation du fichier
+
+1. Transfomer le **.env-example** en **.env** pour configurer vos variables locales
+
+2. Modifiez les variables dans .env selon votre environnement local.
+
+### Etape 4 : Installation BDD
 creation, lancement des containers
 ```
 docker-compose up -d
