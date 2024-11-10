@@ -32,7 +32,7 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager,
         MailerInterface $mailer,
         Token $tokenService,
-         SessionInterface $session
+        SessionInterface $session
 
     ): Response {
 
@@ -99,7 +99,6 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form,
         ]);
     }
-
     function verifierMotDePasse($motDePasse): bool
     {
 
@@ -122,7 +121,7 @@ class RegistrationController extends AbstractController
         if (!preg_match('/[0-9]/', $motDePasse)) {
             return false;
         }
-        // eu moins un caractère spécial
+        // au moins un caractère spécial
         $caracteresSpeciaux = '@$!%*?&';
         $trouveCaractereSpecial = false;
         for ($i = 0; $i < strlen($motDePasse); $i++) {
@@ -136,6 +135,5 @@ class RegistrationController extends AbstractController
         }
         // le mot de passe est valide
         return true;
-
     }
 }

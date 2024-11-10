@@ -132,6 +132,11 @@
             </div>
         {% endfor %}
 
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
         {{ form_start(profileForm) }}
 
         <div class="form-group">
@@ -166,7 +171,7 @@
 
 
         <div class="btn-container">
-            <button type="button" class="btn-password" onclick="window.location.href='/change-password'">Modifier le mot de passe</button>
+            <button type="button" class="btn-password" onclick="window.location.href='/envoieMailMdp'">Modifier le mot de passe</button>
             <button type="button" class="btn-delete" onclick="window.location.href='/user/profile/delete'">Supprimer mon compte</button>
         </div>
 

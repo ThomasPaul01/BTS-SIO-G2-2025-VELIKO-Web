@@ -27,6 +27,5 @@ class Request
 
         return json_decode($response, true);
 
-
     }
 }

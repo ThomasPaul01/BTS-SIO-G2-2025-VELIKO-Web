@@ -12,7 +12,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // get the login error if there is one
+        // récupère l'erreur de connexion s'il y en a une
         $error = $authenticationUtils->getLastAuthenticationError();
 
 
@@ -20,7 +20,7 @@ class SecurityController extends AbstractController
             $this->addFlash('error', "Erreur de connexion : l'email ou le mot de passe est incorrect.");
         }
 
-        // last username entered by the user
+        // dernier nom d'utilisateur saisi par l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/index.html.twig', [
@@ -39,4 +39,6 @@ class SecurityController extends AbstractController
         ]);*/
 
     }
+
+
 }

@@ -34,11 +34,9 @@ class EmailConfirmationController extends AbstractController
             $user->setName($userData['name']);
             $user->setFirstName($userData['firstName']);
             $user->setBirthdate($userData['birthdate']);
-
             $user->setAddress($userData['address']);
             $user->setPostalCode($userData['postalCode']);
             $user->setCity($userData['city']);
-
             $user->setVerified(true);
             $user->setConfirmationToken(null);
 
@@ -49,11 +47,14 @@ class EmailConfirmationController extends AbstractController
             // Supprimer les données de session
             $session->remove('user_data');
 
+            // Message de succès pour confirmer que l'utilisateur peut maintenant se connecter
             $this->addFlash('success', 'Votre adresse e-mail a été confirmée. Vous pouvez maintenant vous connecter.');
 
+            // Rediriger vers la route de connexion
             return $this->redirectToRoute('app_login');
         }
 
+        // Message d'erreur si le token est invalide
         $this->addFlash('error', 'Le lien de confirmation est invalide ou expiré.');
         return $this->redirectToRoute('app_register');
     }
