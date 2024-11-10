@@ -1,141 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Modifier le mot de passe{% endblock %}
 
 {% block content %}
-    <style>
-        /* Styles généraux pour le corps de la page */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fa;
-            margin: 0;
-            padding: 0;
-        }
+    <div class="container">
+        <h1>Modifier le mot de passe</h1>
 
-        /* Style pour le conteneur principal */
-        .form-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Style pour les titres */
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        /* Styles pour les groupes de formulaire */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        /* Styles pour les champs de saisie */
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="date"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            transition: border-color 0.3s;
-        }
-
-        /* Effet de focus sur les champs de saisie */
-        input:focus,
-        textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-        /* Styles pour les boutons */
-        .btn, .btn-back {
-            width: 100%;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-            color: white;
-            text-align: center;
-            display: block;
-            text-decoration: none;
-        }
-
-        /* Style du bouton Register */
-        .btn {
-            background-color: #007bff;
-            border: none;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* Style pour le bouton Retour */
-        .btn-back {
-            background-color: #6c757d;
-        }
-
-        .btn-back:hover {
-            background-color: #5a6268;
-        }
-    </style>
-
-    <div class="form-container">
-        <h1>Register</h1>
-
-        {{ form_start(registrationForm) }}
+        {{ form_start(changePasswordForm) }}
 
         <div class="form-group">
-            {{ form_row(registrationForm.email) }}
+            {{ form_row(changePasswordForm.plainPassword) }}
         </div>
 
         <div class="form-group">
-            {{ form_row(registrationForm.firstName) }}
+            {{ form_row(changePasswordForm.confirmPassword) }}
         </div>
 
-        <div class="form-group">
-            {{ form_row(registrationForm.name) }}
-        </div>
+        <button type="submit" class="btn btn-primary">Enregistrer le nouveau mot de passe</button>
 
-        <div class="form-group">
-            {{ form_row(registrationForm.birthdate) }}
-        </div>
+        {# Affichage des messages flash si présents #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
 
-        <div class="form-group">
-            {{ form_row(registrationForm.address) }}
-        </div>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
 
-        <div class="form-group">
-            {{ form_row(registrationForm.postalCode) }}
-        </div>
 
-        <div class="form-group">
-            {{ form_row(registrationForm.city) }}
-        </div>
+        {{ form_end(changePasswordForm) }}
 
-        <div class="form-group">
-            {{ form_row(registrationForm.agreeTerms) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_row(registrationForm.plainPassword) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_row(registrationForm.confirmPassword) }}
-        </div>
-
-        <button type="submit" class="btn">Register</button>
-
-        {{ form_end(registrationForm) }}
     </div>
 {% endblock %}

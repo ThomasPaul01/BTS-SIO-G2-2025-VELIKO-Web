@@ -102,15 +102,29 @@
         }
     </style>
 
+
     <div class="reset-password-form">
         <h1>Réinitialiser votre mot de passe</h1>
+
+        {# Affichage des messages flash si présents #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         <form method="post" action="{{ path('app_request_reset_password') }}">
             <label for="username">Email :</label>
             <input type="email" name="_username" id="username" required>
             <button type="submit" class="btn btn-primary">Envoyer</button>
         </form>
 
-        <!-- Ajout du bouton Retour -->
         <a href="{{ path('app_login') }}" class="btn-back">Retour à la connexion</a>
     </div>
 

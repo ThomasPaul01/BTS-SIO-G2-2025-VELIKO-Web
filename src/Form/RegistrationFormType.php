@@ -47,7 +47,6 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
-                'label' => 'Mot de passe',
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
@@ -62,7 +61,6 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('confirmPassword', PasswordType::class, [
                 'mapped' => false,
-                'label' => 'Confirmation du mot de passe',
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank(['message' => 'Veuillez confirmer votre mot de passe']),

@@ -37,13 +37,16 @@ class RegistrationController extends AbstractController
     ): Response {
 
         $user = new User();
+
         $form = $this->createForm(RegistrationFormType::class, $user);
+
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
             $confirmPassword = $form->get('confirmPassword')->getData();
-
+            
             // Vérifiez si les mots de passe correspondent
             if ($plainPassword !== $confirmPassword) {
                 $form->get('confirmPassword')->addError(new FormError('Les mots de passe ne correspondent pas.'));
