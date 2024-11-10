@@ -84,6 +84,22 @@
         .reset-password-form .btn-password:hover {
             color: #0056b3;
         }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
     </style>
 
     <div class="reset-password-form">
@@ -93,6 +109,9 @@
             <input type="email" name="_username" id="username" required>
             <button type="submit" class="btn btn-primary">Envoyer</button>
         </form>
+
+        <!-- Ajout du bouton Retour -->
+        <a href="{{ path('app_login') }}" class="btn-back">Retour à la connexion</a>
     </div>
 
 {% endblock %}

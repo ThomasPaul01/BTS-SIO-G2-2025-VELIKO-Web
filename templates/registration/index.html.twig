@@ -7,38 +7,31 @@
         /* Styles généraux pour le corps de la page */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f7fa; /* Couleur de fond douce */
+            background-color: #f4f7fa;
             margin: 0;
             padding: 0;
         }
 
         /* Style pour le conteneur principal */
         .form-container {
-            max-width: 400px; /* Largeur maximale du formulaire */
-            margin: 50px auto; /* Centre le formulaire verticalement et horizontalement */
-            padding: 20px; /* Ajoute de l'espace intérieur */
-            background-color: #ffffff; /* Couleur de fond blanche */
-            border-radius: 8px; /* Coins arrondis */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre portée */
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         /* Style pour les titres */
         h1 {
-            text-align: center; /* Centre le titre */
-            color: #333; /* Couleur du texte */
-            margin-bottom: 20px; /* Espacement en dessous du titre */
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
         }
 
         /* Styles pour les groupes de formulaire */
         .form-group {
-            margin-bottom: 15px; /* Espacement entre les champs */
-        }
-
-        /* Style pour les labels */
-        label {
-            font-weight: bold; /* Épaissit le texte du label */
-            margin-bottom: 5px; /* Espacement sous le label */
-            display: block; /* Permet aux labels de prendre toute la largeur */
+            margin-bottom: 15px;
         }
 
         /* Styles pour les champs de saisie */
@@ -47,53 +40,57 @@
         input[type="password"],
         input[type="date"],
         textarea {
-            width: 100%; /* Largeur complète */
-            padding: 10px; /* Ajoute de l'espace intérieur */
-            border: 1px solid #ccc; /* Bordure grise */
-            border-radius: 4px; /* Coins arrondis */
-            transition: border-color 0.3s; /* Transition de la couleur de bordure */
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s;
         }
 
         /* Effet de focus sur les champs de saisie */
         input:focus,
         textarea:focus {
-            border-color: #007bff; /* Couleur de bordure bleue au focus */
-            outline: none; /* Supprime le contour par défaut */
+            border-color: #007bff;
+            outline: none;
         }
 
         /* Styles pour les boutons */
-        button {
-            width: 100%; /* Largeur complète */
-            padding: 10px; /* Ajoute de l'espace intérieur */
-            background-color: #007bff; /* Couleur de fond bleue */
-            color: white; /* Couleur du texte blanche */
-            border: none; /* Supprime la bordure */
-            border-radius: 4px; /* Coins arrondis */
-            cursor: pointer; /* Change le curseur au survol */
-            font-size: 16px; /* Taille du texte */
-            transition: background-color 0.3s; /* Transition de la couleur de fond */
+        .btn, .btn-back {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            color: white;
+            text-align: center;
+            display: block;
+            text-decoration: none;
         }
 
-        button:hover {
-            background-color: #0056b3; /* Couleur plus foncée au survol */
+        /* Style du bouton Register */
+        .btn {
+            background-color: #007bff;
+            border: none;
         }
 
-        /* Styles pour les messages d'erreur */
-        .form-error {
-            color: #ff0000; /* Couleur rouge pour les erreurs */
-            font-size: 14px; /* Taille du texte pour les messages d'erreur */
-            margin-top: 5px; /* Espacement au-dessus des erreurs */
+        .btn:hover {
+            background-color: #0056b3;
         }
 
-        /* Styles pour la case à cocher */
-        input[type="checkbox"] {
-            margin-right: 5px; /* Espacement à droite de la case à cocher */
+        /* Style pour le bouton Retour */
+        .btn-back {
+            background-color: #6c757d;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
         }
     </style>
 
     <div class="form-container">
         <h1>Register</h1>
-
 
         {{ form_start(registrationForm) }}
 
@@ -107,7 +104,6 @@
 
         <div class="form-group">
             {{ form_row(registrationForm.name) }}
-
         </div>
 
         <div class="form-group">
@@ -139,7 +135,8 @@
         </div>
 
         <button type="submit" class="btn">Register</button>
-        {{ form_end(registrationForm) }}
+        <a href="{{ path('app_login') }}" class="btn-back">Retour</a>
 
+        {{ form_end(registrationForm) }}
     </div>
 {% endblock %}
