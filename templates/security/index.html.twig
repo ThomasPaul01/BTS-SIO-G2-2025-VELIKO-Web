@@ -3,12 +3,81 @@
 {% block title %}Log in!{% endblock %}
 
 {% block content %}
+    <style>
+        /* Style du conteneur du formulaire */
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    <form method="post">
-  {#      {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}#}
+        /* Titre du formulaire */
+        .login-form h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
 
+        /* Champ de formulaire */
+        .form-control {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        /* Lien de réinitialisation de mot de passe */
+        .btn-password {
+            display: block;
+            text-align: center;
+            font-size: 14px;
+            color: #007bff;
+            margin-top: 15px;
+            text-decoration: none;
+        }
+
+        .btn-password:hover {
+            text-decoration: underline;
+        }
+
+        /* Conteneur des boutons */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* Boutons principaux */
+        .btn-primary, .btn-relocate {
+            font-size: 16px;
+            padding: 10px;
+            width: 48%;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-relocate {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+        }
+        .btn-relocate:hover {
+            background-color: #5a6268;
+        }
+    </style>
+
+    <div class="login-form">
         {% if app.user %}
             <div class="mb-3">
                 Connecté en tant que : {{ app.user.userIdentifier }}
@@ -16,33 +85,33 @@
         {% endif %}
 
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email : </label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password : </label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
 
-        {% for label, messages in app.flashes %}
-            <div class="alert alert-{{ label }}">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
+        <form method="post">
+            <label for="username">Email : </label>
+            <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+
+            <label for="password">Password : </label>
+            <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+
+            {# Message d'erreur #}
+            {% for label, messages in app.flashes %}
+                <div class="alert alert-{{ label }}">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            {# Lien de réinitialisation de mot de passe #}
+            <a href="{{ path('app_request_reset_password') }}" class="btn-password">Mot de passe oublié ?</a>
+
+            {# Boutons Sign in et Register en dessous du lien #}
+            <div class="button-group">
+                <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+                <a class="btn btn-lg btn-relocate register" href="/register">Register</a>
             </div>
-        {% endfor %}
-
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
-
-        <a href="{{ path('app_request_reset_password') }}" class="btn-password">Mot de passe oublié</a>
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-
-        <a class="btn btn-relocate register" href="/register">
-            register
-        </a>
-
-    </form>
-
+        </form>
+    </div>
 {% endblock %}
