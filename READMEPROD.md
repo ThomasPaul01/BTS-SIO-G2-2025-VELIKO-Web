@@ -2,8 +2,6 @@
 
 Suivez les étapes ci-dessous pour déployer votre projet Symfony sur le serveur de production.
 
----
-
 ## 1. Téléchargez votre code sur le serveur de production
 Transférez l'ensemble des fichiers du projet (via FTP, SCP, ou autre méthode) sur votre serveur de production.
 
