@@ -15,9 +15,6 @@
         <div class="form-group">
             {{ form_row(changePasswordForm.confirmPassword) }}
         </div>
-
-        <button type="submit" class="btn btn-primary">Enregistrer le nouveau mot de passe</button>
-
         {# Affichage des messages flash si présents #}
         {% for message in app.flashes('error') %}
             <div class="alert alert-danger">
@@ -30,6 +27,9 @@
                 {{ message }}
             </div>
         {% endfor %}
+        <button type="submit" class="btn btn-primary">Enregistrer le nouveau mot de passe</button>
+
+
 
 
         {{ form_end(changePasswordForm) }}

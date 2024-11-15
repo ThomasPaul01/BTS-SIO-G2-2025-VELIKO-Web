@@ -81,7 +81,7 @@ class FavoriteController extends AbstractController
 
         try {
             $entityManager->flush();
-            return new JsonResponse(['message' => 'Station '.$stationId.' retirée des favoris.', 'type' => 'success'], 200);
+            return new JsonResponse(['message' => 'Station retirée des favoris.', 'type' => 'success'], 200);
         } catch (\Exception $e) {
             return new JsonResponse(['message' => 'Erreur lors de la suppression des favoris: ' . $e->getMessage(), 'type' => 'error'], 500);
         }

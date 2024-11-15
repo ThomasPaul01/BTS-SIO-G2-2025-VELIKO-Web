@@ -79,8 +79,16 @@
 
                     map.setView([userLat, userLon], 14);
 
-                    L.marker([userLat, userLon]).addTo(map)
-                        .bindPopup("Vous êtes ici").openPopup();
+                    L.marker([userLat, userLon], {
+                        icon: L.icon({
+                            iconUrl: '/images/redping.png',
+                            iconSize: [25, 40],
+                            iconAnchor: [16, 32],
+                            popupAnchor: [-4, -32]
+                        })
+                    }).addTo(map)
+                        .bindPopup("Vous êtes ici")
+                        .openPopup();
 
                 }, function(error) {
                     console.error('Geolocation error: ' + error.message);
