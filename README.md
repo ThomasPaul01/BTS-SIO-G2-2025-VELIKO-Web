@@ -53,5 +53,3 @@ Si besoin de creer automatiquement des users dans la base de donne :
 ```
 symfony console doctrine:fixtures:load
 ```
-
-
