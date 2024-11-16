@@ -19,7 +19,7 @@ DATABASE_URL="mysql://[username]:[password]@[host]:[port]/[database_name]?server
 ```
 
 ## 4 . Installez les dépendances des fournisseurs
-Installezz ou mettez à jour les dépendances du projet avec Composer. Cette étape peut être réalisée avant ou après le téléchargement du code sur le serveur.
+Installez ou mettez à jour les dépendances du projet avec Composer. Cette étape peut être réalisée avant ou après le téléchargement du code sur le serveur.
 
 ```
 composer install --no-dev --optimize-autoloader
