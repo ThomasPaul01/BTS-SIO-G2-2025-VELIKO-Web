@@ -18,7 +18,7 @@ composer install
 
  1. Transformer le **.env-example** en **.env** pour configurer vos variables locales
 
-2. Modifiez les variables dans .env selon votre environnement local
+2. Modifiez les variables du .env selon votre environnement local
 
 ⚠️ Obligatoire : 
    - APP_SECRET
@@ -53,5 +53,3 @@ Si besoin de creer automatiquement des users dans la base de donne :
 ```
 symfony console doctrine:fixtures:load
 ```
-
-
