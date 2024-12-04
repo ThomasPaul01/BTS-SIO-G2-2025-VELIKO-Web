@@ -77,6 +77,7 @@ class ReservationController extends AbstractController
 
         try {
             $entityManager->flush();
+            $this->addFlash('success','La réservation a bien été effectuée.');
             return $this->redirectToRoute('initMap');
 
         } catch (\Exception $e) {

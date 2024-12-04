@@ -132,11 +132,6 @@
             </div>
         {% endfor %}
 
-
-        {% for message in app.flashes('error') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-
         {{ form_start(profileForm) }}
 
         <div class="form-group">

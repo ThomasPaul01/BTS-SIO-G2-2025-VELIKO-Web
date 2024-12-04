@@ -67,6 +67,7 @@
                     return response.json();
                 })
                 .then(data => {
+                    //Afficher message d'erreur
                     const messageDiv = document.getElementById('message');
                     messageDiv.style.display = 'block';
                     messageDiv.innerText = data.message;

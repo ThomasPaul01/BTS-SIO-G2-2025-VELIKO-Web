@@ -41,6 +41,35 @@
         .favorite-btn:active {
             transform: translateY(1px); /* Effet enfoncé au clic */
         }
+        .reservation-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 4px 8px;/* Réduction de la taille du padding */
+            border-radius: 5px;
+            font-size: 12px;/* Réduction de la taille de la police */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre subtile */
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .reservation-btn span.icon {
+            font-size: 14px;  /* Réduction de la taille de l'icône */
+            margin-right: 6px;  /* Ajustement de l'espace autour de l'icône */
+        }
+
+        .reservation-btn:hover {
+            background-color: #1A67E1; /* Assombrir au survol */
+            transform: translateY(-2px); /* Léger effet de soulèvement */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée */
+        }
+
+        .reservation-btn:active {
+            transform: translateY(1px); /* Effet enfoncé au clic */
+        }
 
     </style>
 {% endblock %}
@@ -52,6 +81,18 @@
         </div>
     {% endif %}
     <div id="message" style="display:none; padding: 10px; margin: 10px 0; border-radius: 5px;"></div>
+    {# Affichage des messages flash si présents #}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
     <div id="map"></div>
 {% endblock %}
 
@@ -60,7 +101,6 @@
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
     <script>
         function initMap() {
-            console.log('Initialisation de la carte...');
 
             // Initialisation de la carte
             var map = L.map('map').setView([48.8566, 2.3522], 12);
