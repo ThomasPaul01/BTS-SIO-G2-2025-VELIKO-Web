@@ -34,6 +34,7 @@ class AppFixtures extends Fixture
         $date=new \DateTime("2025-01-01");
         $user->setBirthdate($date);
         $user->setVerified(true);
+        $user->setStatut(false);
 
         $manager->persist($user);
 
@@ -51,6 +52,7 @@ class AppFixtures extends Fixture
             $date=new \DateTime("2000-01-01");
             $user->setBirthdate($date);
             $user->setVerified(true);
+            $user->setStatut(false);
 
             $manager->persist($user);
         }
