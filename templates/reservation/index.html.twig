@@ -1,0 +1,197 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation{% endblock %}
+
+{% block content %}
+    <style>
+        .reservation-form-container {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .autocomplete-list {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+            width: 100%;
+        }
+        .autocomplete-list li {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .autocomplete-list li:hover {
+            background: #f5f5f5;
+        }
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #btn-retour {
+            background-color: #f44336;
+            color: white;
+        }
+        #btn-validation {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .alert-error {
+            color: #ff0000;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
+
+    <div class="reservation-form-container">
+        {# Affichage des messages flash si présents #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <h1>Formulaire de réservation</h1>
+        <p>Station de départ : <strong>{{ station_depart.name }}</strong></p>
+
+        <form action="{{ path('app_reservation_validate') }}" method="POST" id="reservation-form">
+            <!-- Station de départ -->
+            <input type="hidden" name="station_depart_id" value="{{ station_depart.getStationId() }}">
+
+            <!-- Station d'arrivée -->
+            <div class="form-group">
+                <label for="station-arrivee">Station d'arrivée :</label>
+                <input type="text" id="station-arrivee" name="station_arrivee_name" placeholder="Recherchez une station" required>
+                <input type="hidden" id="station-arrivee-id" name="station_arrivee_id">
+                <ul id="station-arrivee-list" class="autocomplete-list"></ul>
+            </div>
+
+            <!-- Date de réservation -->
+            <div class="form-group">
+                <label for="date-reservation">Date de réservation :</label>
+                <input type="date" id="date-reservation" name="date_reservation" required>
+            </div>
+
+            <!-- Type de Vélo -->
+            <div class="form-group">
+                <label for="type-velo">Type de vélo :</label>
+                <select id="type-velo" name="type_velo" required>
+                    <option value="Mecanique">Vélo mécanique</option>
+                    <option value="Evelo">Vélo électrique</option>
+                </select>
+            </div>
+
+
+            <!-- Boutons -->
+            <div class="form-buttons">
+                <button type="button" id="btn-retour" onclick="window.location.href='{{ path('initMap') }}';">Retour à la carte</button>
+                <button type="submit" id="btn-validation">Valider la réservation</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Récupération des stations pour l'autocomplétion
+        const stations = {{ stations|json_encode|raw }};
+
+        const arriveeInput = document.getElementById('station-arrivee');
+        const arriveeList = document.getElementById('station-arrivee-list');
+        const arriveeIdInput = document.getElementById('station-arrivee-id');
+
+        // Fonction pour afficher les suggestions en fonction de l'entrée de l'utilisateur
+        const filterAndDisplaySuggestions = (query) => {
+            // Filtrer les stations qui correspondent à la requête de l'utilisateur
+            const filteredStations = stations.filter(station => station.name.toLowerCase().includes(query.toLowerCase()));
+
+            // Vider la liste de suggestions précédente
+            arriveeList.innerHTML = '';
+
+            // Ajouter les suggestions filtrées dans la liste
+            filteredStations.forEach(station => {
+                const li = document.createElement('li');
+                li.textContent = station.name;
+
+                // Ajouter un écouteur d'événements pour sélectionner une station lorsqu'elle est cliquée
+                li.addEventListener('click', () => {
+                    selectStation(station);
+                });
+
+                // Ajouter l'élément à la liste des suggestions
+                arriveeList.appendChild(li);
+            });
+
+            // Auto-sélectionner la première suggestion si une seule station correspond
+            if (filteredStations.length === 1) {
+                selectStation(filteredStations[0]);
+            }
+        };
+
+        // Fonction pour sélectionner une station et remplir les champs appropriés
+        const selectStation = (station) => {
+            arriveeInput.value = station.name; // Remplir le champ de texte avec le nom de la station
+            arriveeIdInput.value = station.station_id; // Remplir le champ caché avec l'ID de la station
+            arriveeList.innerHTML = ''; // Vider la liste des suggestions
+        };
+
+        // Événement "input" : chaque fois que l'utilisateur tape quelque chose
+        arriveeInput.addEventListener('input', function () {
+            const query = this.value;
+            filterAndDisplaySuggestions(query);
+        });
+
+        // Événement "blur" : quand l'utilisateur perd le focus sur le champ de saisie
+        arriveeInput.addEventListener('blur', function () {
+            // Si des suggestions sont présentes, sélectionner la première suggestion
+            if (arriveeList.children.length > 0) {
+                const firstSuggestion = arriveeList.children[0];
+                selectStation(stations.find(station => station.name === firstSuggestion.textContent));
+            }
+        });
+    </script>
+
+{% endblock %}

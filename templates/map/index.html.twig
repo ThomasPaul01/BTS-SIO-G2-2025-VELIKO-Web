@@ -122,7 +122,11 @@
                             "<br><img src='/images/icone-Evelo.png' alt='icone-Evole' width='40'>Vélos électriques disponibles : " + station.electric_bikes +
                             `<br><button id="${buttonId}" class="favorite-btn" onclick="${buttonAction}(${station.station_id})">
                                 <span class="icon">${icon}</span> ${buttonLabel}
+                             </button>`+
+                            `<br><button id="Reservation" class="reservation-btn" onclick="redirectToReservation(${station.station_id})">
+                                Effectuer une réservation
                              </button>`
+
                         ).openPopup();
                     });
 
@@ -168,7 +172,7 @@
                 .catch(error => console.error('Erreur:', error));
         }
 
-        //afficher message pour tous les cas
+        //Afficher message pour tous les cas
         function showMessage(message, type) {
             const messageDiv = document.getElementById('message');
             messageDiv.style.display = 'block';
@@ -176,6 +180,12 @@
             messageDiv.style.backgroundColor = type === 'success' ? '#4CAF50' : '#f44336';
             messageDiv.style.color = 'white';
             setTimeout(() => messageDiv.style.display = 'none', 3000);
+        }
+
+        //Renvoyer vers la page de reservation avec l'id de la station
+        function redirectToReservation(idStationDepart) {
+
+            window.location.href = `/user/reservation/${idStationDepart}`;
         }
 
         window.onload = initMap;

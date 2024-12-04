@@ -66,6 +66,7 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $user->setRoles(['ROLE_USER']);
             $user->setVerified(false);
+            $user->setStatut(false);
 
             // Générez le token et l'enregistrez pour l'utilisateur
             $confirmationToken = $tokenService->generateToken();
@@ -84,6 +85,7 @@ class RegistrationController extends AbstractController
                 "postalCode" => $user->getPostalCode(),
                 "city" => $user->getCity(),
                 'confirmationToken' => $confirmationToken,
+                'statut' => false,
             ]);
 
             // Créez le lien de confirmation

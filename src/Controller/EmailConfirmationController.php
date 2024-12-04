@@ -39,6 +39,7 @@ class EmailConfirmationController extends AbstractController
             $user->setCity($userData['city']);
             $user->setVerified(true);
             $user->setConfirmationToken(null);
+            $user->setStatut(false);
 
             // Persister l'utilisateur dans la base de données
             $entityManager->persist($user);

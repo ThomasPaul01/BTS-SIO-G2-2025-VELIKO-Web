@@ -33,12 +33,7 @@ class Station
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $lastUpdatedAt = null;
 
-    // Getters et Setters...
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
     public function getStationId(): ?int
     {
         return $this->station_id;

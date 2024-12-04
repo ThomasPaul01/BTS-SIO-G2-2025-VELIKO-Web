@@ -18,13 +18,16 @@ class Reservation
     private ?\DateTimeInterface $date_reservation = null;
 
     #[ORM\Column(type: Types::BIGINT)]
-    private ?string $id_station_depart = null;
+    private ?int $id_station_depart = null;
 
     #[ORM\Column(type: Types::BIGINT)]
-    private ?string $id_station_fin = null;
+    private ?int $id_station_fin = null;
 
-    #[ORM\Column]
-    private ?int $id_user = null;
+    #[ORM\Column(length: 255)]
+    private ?string $userEmail = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $type_velo = null;
 
     public function getId(): ?int
     {
@@ -43,38 +46,50 @@ class Reservation
         return $this;
     }
 
-    public function getIdStationDepart(): ?string
+    public function getIdStationDepart(): ?int
     {
         return $this->id_station_depart;
     }
 
-    public function setIdStationDepart(string $id_station_depart): static
+    public function setIdStationDepart(int $id_station_depart): static
     {
         $this->id_station_depart = $id_station_depart;
 
         return $this;
     }
 
-    public function getIdStationFin(): ?string
+    public function getIdStationFin(): ?int
     {
         return $this->id_station_fin;
     }
 
-    public function setIdStationFin(string $id_station_fin): static
+    public function setIdStationFin(int $id_station_fin): static
     {
         $this->id_station_fin = $id_station_fin;
 
         return $this;
     }
 
-    public function getIdUser(): ?int
+    public function getUserEmail(): ?string
     {
-        return $this->id_user;
+        return $this->userEmail;
     }
 
-    public function setIdUser(int $id_user): static
+    public function setUserEmail(string $userEmail): static
     {
-        $this->id_user = $id_user;
+        $this->userEmail = $userEmail;
+
+        return $this;
+    }
+
+    public function getTypeVelo(): ?string
+    {
+        return $this->type_velo;
+    }
+
+    public function setTypeVelo(string $type_velo): static
+    {
+        $this->type_velo = $type_velo;
 
         return $this;
     }
