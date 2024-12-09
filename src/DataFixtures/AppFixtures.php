@@ -53,6 +53,7 @@ class AppFixtures extends Fixture
             $user->setBirthdate($date);
             $user->setVerified(true);
             $user->setStatut(false);
+            $user->setMustChangePassword(false);
 
             $manager->persist($user);
         }

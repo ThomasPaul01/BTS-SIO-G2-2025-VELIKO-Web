@@ -77,6 +77,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $statut = null;
 
+    #[ORM\Column]
+    private ?bool $must_change_password = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -254,6 +257,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatut(bool $statut): static
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function isMustChangePassword(): ?bool
+    {
+        return $this->must_change_password;
+    }
+
+    public function setMustChangePassword(bool $must_change_password): static
+    {
+        $this->must_change_password = $must_change_password;
 
         return $this;
     }
