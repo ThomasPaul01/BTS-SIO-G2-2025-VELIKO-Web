@@ -31,7 +31,7 @@
                         <td>{{ stations[reservation.idStationDepart].name }}</td>
                         <td>{{ stations[reservation.idStationFin].name }}</td>
                         <td>{{ reservation.getTypeVelo() }}</td>
-                        <td><a class="btn btn-danger btn-sm" onclick="removeReservation({{ reservation.getId() }})">Supprimer</a></td>
+                        <td><a class="btn btn-danger btn-sm" onclick="removeReservation({{ reservation.getId() }})"><i class="fas fa-trash-alt"></i> Supprimer</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -42,7 +42,10 @@
     {% endif %}
 {% endblock %}
 {% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
     <script>
+
         function removeReservation(idReservation) {
 
             fetch(`/user/reservation/remove-${idReservation}`, { method: 'POST' })
