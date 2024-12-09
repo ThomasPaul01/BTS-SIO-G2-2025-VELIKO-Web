@@ -33,6 +33,7 @@
 <body class="d-flex flex-column min-vh-100">
 
 {% if app.user %}
+    {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_USER' in app.user.roles %}
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#"></a>
@@ -51,13 +52,25 @@
             </div>
         </div>
     </nav>
+    {% endif %}
 {% endif %}
 
 <div class="container" id="head">
-    <a class="navbar-brand" href="/user/map">
+    {% if app.user %}
+        <!--link for Role_User and Role_Admin-->
+        {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_USER' in app.user.roles %}
+            <a class="navbar-brand" href="/user/map">
+                <img src="{{ asset('images/logoVeliko.png') }}" alt="Logo Veliko" width="200">
+            </a>
+        {% else %}
+            <!--no link for Role_Blocked-->
+            <img src="{{ asset('images/logoVeliko.png') }}" alt="Logo Veliko" width="200">
+        {% endif %}
+    {% else %}
+        <!--no link-->
         <img src="{{ asset('images/logoVeliko.png') }}" alt="Logo Veliko" width="200">
-    </a>
-    <h1></h1>
+    {% endif %}
+
 </div>
 
 <div class="container">
