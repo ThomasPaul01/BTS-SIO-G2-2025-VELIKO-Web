@@ -48,6 +48,10 @@ Arreter containers and supprimer containers
 ``` 
 docker-compose down
 ```
+**Mailer :** Acceder a la boite mail via cette url
+
+http://localhost:8025/
+
 ### 🎁Bonus : AppFixtures
 Si besoin de creer automatiquement des users dans la base de donne :
 ```
