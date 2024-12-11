@@ -67,30 +67,4 @@ class AppFixtures extends Fixture
 
         $manager->flush();
     }
-    private function loadReservation(ObjectManager $manager): void
-    {
-            $faker = Factory::create();
-            $users = $manager->getRepository(User::class)->findAll();
-
-            foreach ($users as $user) {
-                for($i=0;$i<5;$i++) {
-                    $reservation = new Reservation();
-                    $reservation->setDateReservation($faker->dateTimeBetween('-1 month', '+1 month'));
-                    $reservation->setUserEmail($user->getEmail());
-
-                    $stations = $manager->getRepository(Station::class)->findAll();
-                    $stationIds = array_map(fn($station) => $station->getId(), $stations);
-
-                    $reservation->setIdStationFin($faker->randomElement($stationIds));
-                    $reservation->setIdStationDepart($faker->randomElement($stationIds));
-                    $reservation->setTypeVelo($faker->randomElement(['Evelo', 'Mecanique']));
-
-                    $manager->persist($reservation);
-                }
-
-        }
-
-        $manager->flush();
-    }
-
 }
