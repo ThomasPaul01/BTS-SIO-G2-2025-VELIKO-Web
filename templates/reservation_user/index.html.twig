@@ -27,7 +27,7 @@
                 <tbody>
                 {% for reservation in reservations %}
                     <tr>
-                        <td>{{ reservation.getDateReservation()|date('d-m-Y') }}</td>
+                        <td>{{ reservation.getDateReservation()|date('d-m-Y') }}  à  {{ reservation.getDateReservation()|date('H:i') }}</td>
                         <td>{{ stations[reservation.idStationDepart].name }}</td>
                         <td>{{ stations[reservation.idStationFin].name }}</td>
                         <td>{{ reservation.getTypeVelo() }}</td>

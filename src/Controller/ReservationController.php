@@ -45,33 +45,21 @@ class ReservationController extends AbstractController
         // Récupérer les données du formulaire
         $stationDepartId = $request->request->get('station_depart_id');
         $stationArrivee = $request->request->get('station_arrivee_id');
-        $dateReservation = $request->request->get('date_reservation');
         $typeVelo = $request->request->get('type_velo');
 
+        //date actuelle
         $currentDate = new \DateTime();
-        $reservationDate = \DateTime::createFromFormat('Y-m-d', $dateReservation);
 
-        // Si la date est dans le passé
-        if ($reservationDate < $currentDate) {
-
-            $this->addFlash('error', 'La date de réservation ne peut pas être dans le passé.');
-
-            return $this->redirectToRoute('app_reservation',[
-            'idStationDepart' => $stationDepartId
-            ]);
-        }
-
-        $dateReservation = new \DateTime($dateReservation);
         $user=$security->getUser();
 
-        $reservation = new Reservation();
 
-        $reservation->setDateReservation($dateReservation);
+        //Creation reservation
+        $reservation = new Reservation();
+        $reservation->setDateReservation($currentDate);
         $reservation->setIdStationDepart((int)$stationDepartId);
         $reservation->setIdStationFin((int)$stationArrivee);
         $reservation->setUserEmail($user->getUserIdentifier());
         $reservation->setTypeVelo($typeVelo);
-
 
         $entityManager->persist($reservation);
 
