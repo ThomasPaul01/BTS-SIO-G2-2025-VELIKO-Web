@@ -53,7 +53,17 @@ docker-compose down
 http://localhost:8025/
 
 ### 🎁Bonus : AppFixtures
-Si besoin de creer automatiquement des users dans la base de donne :
+Si besoin de creer automatiquement **des users et admin** dans la base de donne: (Avant le lancement du site pour ne pas vider la table station)
 ```
 symfony console doctrine:fixtures:load
 ```
+Si besoin de creer automatiquement **des réservations** pour tout les utilisateurs: (Apres la creation d'utilisateur)
+```
+symfony console d:f:l --group=Reservation --append
+```
+Si besoin de creer automatiquement **des favoris** pour tout les utilisateurs: (Apres la creation d'utilisateur)
+```
+
+```
+
+
