@@ -16,7 +16,7 @@ composer install
 
 ### Etape 3 : Initialisation du fichier
 
- 1. Transformer le **.env-example** en **.env** pour configurer vos variables locales
+1. Copier le **.env-example** en **.env** pour configurer vos variables locales
 
 2. Modifiez les variables du .env selon votre environnement local
 
@@ -53,17 +53,17 @@ docker-compose down
 http://localhost:8025/
 
 ### 🎁Bonus : AppFixtures
-Si besoin de creer automatiquement **des users et admin** dans la base de donne: (Avant le lancement du site pour ne pas vider la table station)
+Si besoin de creer automatiquement **des users et admin** dans la base de donne: (⚠️Avant le lancement du site pour ne pas vider la table station)
 ```
 symfony console doctrine:fixtures:load
 ```
-Si besoin de creer automatiquement **des réservations** pour tout les utilisateurs: (Apres la creation d'utilisateur)
+Si besoin de creer automatiquement **des réservations** pour tout les utilisateurs: (⚠️Apres la creation d'utilisateur et du lancement du site)
 ```
 symfony console d:f:l --group=Reservation --append
 ```
-Si besoin de creer automatiquement **des favoris** pour tout les utilisateurs: (Apres la creation d'utilisateur)
+Si besoin de creer automatiquement **des favoris** pour tout les utilisateurs: (⚠️Apres la creation d'utilisateur et du lancement du site)
 ```
-
+symfony console d:f:l --group=Favorite --append
 ```
 
 
