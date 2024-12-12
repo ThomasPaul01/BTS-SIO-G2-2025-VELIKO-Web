@@ -29,6 +29,7 @@ class ReservationController extends AbstractController
             ];
         }, $stations);
 
+
         return $this->render('reservation/index.html.twig', [
             'station_depart' => $stationDepart,
             'stations' => $stationsData,
@@ -64,6 +65,7 @@ class ReservationController extends AbstractController
         $entityManager->persist($reservation);
 
         try {
+
             $entityManager->flush();
             $this->addFlash('success','La réservation a bien été effectuée.');
             return $this->redirectToRoute('initMap');

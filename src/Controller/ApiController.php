@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Entity\Station;
 use App\Entity\StationFav;
+use App\Form\ChangePasswordFormType;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use App\Request\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -83,11 +85,15 @@ class ApiController extends AbstractController
 
 // Méthode pour rendre les données de la carte sans recharger l'API
     #[Route('/user/map', name: 'initMap')]
-    public function renderStations(EntityManagerInterface $entityManager): Response
+    public function renderStations(EntityManagerInterface $entityManager,SymfonyRequest $request): Response
     {
-        $allStations = $entityManager->getRepository(Station::class)->findAll();
 
         $user = $this->getUser();
+        $form = $this->createForm(ChangePasswordFormType::class);
+        $form->handleRequest($request);
+
+        $allStations = $entityManager->getRepository(Station::class)->findAll();
+
         $userEmail = $user?->getUserIdentifier();
         $favorites = $entityManager->getRepository(StationFav::class)->findBy(['userEmail' => $userEmail]);
         $favoriteStationIds = array_map(fn($fav) => $fav->getStationId(), $favorites);
@@ -106,10 +112,15 @@ class ApiController extends AbstractController
             ];
         }
 
+        // Vérifiez si l'utilisateur est connecté et si le changement de mot de passe est requis
+        if ($user && $user->isMustChangePassword())
+        {
+            return $this->redirectToRoute('app_emailMdp');
+        }
+
         return $this->render('map/index.html.twig', [
             'stations' => $stationsData,
             'userEmail' => $userEmail,
         ]);
     }
-
 }

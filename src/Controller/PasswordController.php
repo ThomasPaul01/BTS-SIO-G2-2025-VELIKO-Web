@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Form\ChangePasswordFormType;
 use App\Entity\User;
-use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Services\Token;
 use Doctrine\ORM\EntityManagerInterface;
@@ -59,16 +58,39 @@ class PasswordController extends AbstractController
             ->from('noreply@yourdomain.com')
             ->to($user->getEmail())
             ->subject('Confirmation de réinitialisation de mot de passe')
-            ->html("<p>Veuillez cliquer sur le lien pour confirmer votre demande de réinitialisation de mot de passe : <a href='{$confirmationUrl}'>Confirmer la réinitialisation</a></p>");
+            ->html("
+        <div style='font-family: Arial, sans-serif; line-height: 1.5; color: #333;'>
+            <h2 style='color: #d9534f;'>Bonjour {$user->getFirstName()},</h2>
+            <p>
+                Vous avez demandé une réinitialisation de votre mot de passe. Veuillez confirmer cette demande en cliquant sur le lien ci-dessous :
+            </p>
+            <p style='text-align: center;'>
+                <a href='{$confirmationUrl}' style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;'>Confirmer la réinitialisation</a>
+            </p>
+            <p>
+                Si vous n'avez pas demandé cette action, veuillez ignorer cet e-mail. Le lien est valable seulement temporairement.
+            </p>
+            <p style='margin-top: 20px; font-size: 14px; color: #888;'>
+                Merci de votre confiance,<br>
+                L'équipe de support de Veliko
+            </p>
+        </div>
+    ");
 
         $mailer->send($confirmationEmail);
 
         $this->addFlash('success', 'Un e-mail de confirmation a été envoyé. Veuillez vérifier votre boîte de réception.');
-        return $this->redirectToRoute('app_profile');
+
+        if ($user && $user->isMustChangePassword())
+        {
+            return $this->render('forced_password/index.html.twig', []);
+        }
+        else
+        {
+            return $this->redirectToRoute('app_profile');
+        }
+
     }
-
-
-
 
     #[Route('/reset-password', name: 'app_request_reset_password', methods: ['GET', 'POST'])]
     public function requestResetPassword(Request $request, UserRepository $userRepository, Token $tokenService, MailerInterface $mailer, EntityManagerInterface $entityManager): Response {
@@ -104,7 +126,24 @@ class PasswordController extends AbstractController
                 ->from('noreply@yourdomain.com')
                 ->to($user->getEmail())
                 ->subject('Confirmation de réinitialisation de mot de passe')
-                ->html("<p>Veuillez cliquer sur le lien pour confirmer votre demande de réinitialisation de mot de passe : <a href='{$confirmationUrl}'>Confirmer la réinitialisation</a></p>");
+                ->html("
+        <div style='font-family: Arial, sans-serif; line-height: 1.5; color: #333;'>
+            <h2 style='color: #d9534f;'>Bonjour {$user->getFirstName()},</h2>
+            <p>
+                Vous avez demandé une réinitialisation de votre mot de passe. Veuillez confirmer cette demande en cliquant sur le lien ci-dessous :
+            </p>
+            <p style='text-align: center;'>
+                <a href='{$confirmationUrl}' style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;'>Confirmer la réinitialisation</a>
+            </p>
+            <p>
+                Si vous n'avez pas demandé cette action, veuillez ignorer cet e-mail. Le lien est valable seulement temporairement.
+            </p>
+            <p style='margin-top: 20px; font-size: 14px; color: #888;'>
+                Merci de votre confiance,<br>
+                L'équipe de support de Veliko
+            </p>
+        </div>
+    ");
 
             $mailer->send($confirmationEmail);
 
@@ -113,10 +152,6 @@ class PasswordController extends AbstractController
         }
         return $this->render('/reset_password_request/index.html.twig');
     }
-
-
-
-
 
     #[Route('/confirm-reset-password/{token}', name: 'app_confirm_email_pwd')]
     public function confirmResetPassword(
@@ -147,7 +182,8 @@ class PasswordController extends AbstractController
     ): Response {
         // Récupère l'ID de l'utilisateur à partir de la session
         $userId = $session->get('reset_password_user_id');
-        if (!$userId) {
+        if (!$userId)
+        {
             $this->addFlash('error', 'Une erreur est survenue. Veuillez recommencer le processus.');
             return $this->redirectToRoute('app_profile');
         }
@@ -184,6 +220,7 @@ class PasswordController extends AbstractController
             // Met à jour le mot de passe et réinitialise le token
             $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
             $user->setConfirmationToken(null);
+            $user->setMustChangePassword(false);
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -230,7 +267,8 @@ class PasswordController extends AbstractController
                 break;
             }
         }
-        if (!$trouveCaractereSpecial) {
+        if (!$trouveCaractereSpecial)
+        {
             return false;
         }
         // le mot de passe est valide

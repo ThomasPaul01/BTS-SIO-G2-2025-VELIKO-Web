@@ -78,7 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $statut = null;
 
     #[ORM\Column]
-    private ?bool $must_change_password = null;
+    private ?bool $must_change_password = false;
 
     public function getId(): ?int
     {
@@ -272,5 +272,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }

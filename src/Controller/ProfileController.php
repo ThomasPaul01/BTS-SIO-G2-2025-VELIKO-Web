@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\ProfileFormType; // Assurez-vous d'inclure le bon namespace du form type
+use App\Form\ProfileFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +17,11 @@ class ProfileController extends AbstractController
     {
         // Récupère l'utilisateur actuellement connecté
         $user = $security->getUser();
+
+        if ($user && $user->isMustChangePassword())
+        {
+            return $this->redirectToRoute('app_emailMdp');
+        }
 
         // Si aucun utilisateur n'est connecté, on peut rediriger vers la page de connexion
         if (!$user) {

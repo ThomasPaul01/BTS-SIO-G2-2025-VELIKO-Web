@@ -17,6 +17,11 @@ class FavoriteController extends AbstractController
     {
         $user = $security->getUser();
 
+        if ($user && $user->isMustChangePassword())
+        {
+            return $this->redirectToRoute('app_emailMdp');
+        }
+
         // Récupérer les favoris de l'utilisateur
         $favorites = $entityManager->getRepository(StationFav::class)
             ->findBy(['userEmail' => $user->getUserIdentifier()]);

@@ -19,6 +19,11 @@ class ReservationUserController extends AbstractController
 
         $user = $security->getUser();
 
+        if ($user && $user->isMustChangePassword())
+        {
+            return $this->redirectToRoute('app_emailMdp');
+        }
+
         // Récupérer les réservations de l'utilisateur
         $reservations = $entityManager->getRepository(Reservation::class)
             ->findBy(['userEmail' => $user->getUserIdentifier()]);

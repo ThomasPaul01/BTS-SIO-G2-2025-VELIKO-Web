@@ -67,6 +67,7 @@ class RegistrationController extends AbstractController
             $user->setRoles(['ROLE_USER']);
             $user->setVerified(false);
             $user->setStatut(false);
+            $user->setMustChangePassword(false);
 
             // Générez le token et l'enregistrez pour l'utilisateur
             $confirmationToken = $tokenService->generateToken();
@@ -86,6 +87,7 @@ class RegistrationController extends AbstractController
                 "city" => $user->getCity(),
                 'confirmationToken' => $confirmationToken,
                 'statut' => false,
+                'mustChangePassword' => false,
             ]);
 
             // Créez le lien de confirmation
@@ -100,8 +102,23 @@ class RegistrationController extends AbstractController
                 ->from('noreply@yourdomain.com')
                 ->to($user->getEmail())
                 ->subject('Confirmation d\'adresse e-mail')
-                ->html("<p>Veuillez cliquer sur le lien pour confirmer votre adresse e-mail : <a href='{$confirmationUrl}'>Confirmer mon adresse e-mail</a></p>");
-
+                ->html("<div style='font-family: Arial, sans-serif; line-height: 1.5; color: #333;'>
+    <h2 style='color: #28a745;'>Bienvenue {$user->getFirstName()} !</h2>
+    <p>
+        Merci de vous être inscrit sur notre plateforme. Pour finaliser la création de votre compte, veuillez confirmer votre adresse e-mail en cliquant sur le lien ci-dessous :
+    </p>
+    <p style='text-align: center;'>
+        <a href='{$confirmationUrl}' style='display: inline-block; padding: 10px 20px; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;'>Confirmer mon compte</a>
+    </p>
+    <p>
+        Si vous n'avez pas créé ce compte, veuillez ignorer cet e-mail. Le lien est valable seulement temporairement.
+    </p>
+    <p style='margin-top: 20px; font-size: 14px; color: #888;'>
+        Merci de nous avoir rejoint,<br>
+        L'équipe de support de Veliko
+    </p>
+</div>
+");
             $mailer->send($email);
 
             $this->addFlash('success', 'Un e-mail de confirmation a été envoyé. Veuillez vérifier votre boîte de réception.');
