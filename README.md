@@ -6,7 +6,7 @@
 ```bash
 git clone git@github.com:ort-montreuil/BTS-SIO-G2-2025-VELIKO-Web.git
 ```
-### Etape 2 :Installation des dépendances 
+### Etape 2 : Installation des dépendances 
 
 
 Installation des dépendances avec composer(vendor) 
@@ -48,7 +48,7 @@ Arreter containers and supprimer containers
 ``` 
 docker-compose down
 ```
-**Mailer :** Acceder a la boite mail via cette url
+**Mailer :** Acceder a la boite mail via cette url en local
 
 http://localhost:8025/
 
