@@ -26,26 +26,26 @@ composer install
 
 ### Etape 4 : Installation BDD
 Création, lancement des containers
-```
-docker-compose up -d
+```bash
+docker-compose up
 ```
 Exécutez la migration
-```
+```bash
 symfony console doctrine:migrations:migrate
 ```
 
 **Info :** Commande de lancement et d'arret Symfony :
 
 Pour lancer le serveur
-```
+```bash
 symfony server:start
 ```
 Pour arreter le serveur
-```
+```bash
 symfony server:stop
 ```
 Arreter containers and supprimer containers
-``` 
+```bash
 docker-compose down
 ```
 **Mailer :** Acceder a la boite mail via cette url en local
@@ -53,15 +53,16 @@ docker-compose down
 http://localhost:8025/
 
 ### 🎁Bonus : AppFixtures (Dans un environnement de DEV)
+
 Si besoin de creer automatiquement **des users et admin** dans la base de donne: (⚠️Avant le lancement du site pour ne pas vider la table station)
-```
-symfony console doctrine:fixtures:load
+```bash
+symfony console d:f:l --group=UserAndAdmin --append
 ```
 Si besoin de creer automatiquement **des réservations** pour tout les utilisateurs: (⚠️Apres la creation d'utilisateur et du lancement du site)
-```
+```bash
 symfony console d:f:l --group=Reservation --append
 ```
 Si besoin de creer automatiquement **des favoris** pour tout les utilisateurs: (⚠️Apres la creation d'utilisateur et du lancement du site)
-```
+```bash
 symfony console d:f:l --group=Favorite --append
 ```
