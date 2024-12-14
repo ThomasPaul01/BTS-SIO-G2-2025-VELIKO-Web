@@ -35,13 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank(message: 'Le nom est requis.')]
-    #[Assert\Length(min: 5, max: 20, minMessage: 'Le nom doit comporter au moins 5 caractères.', maxMessage: 'Le nom doit comporter au maximum 20 caractères.')]
     #[Assert\Regex(pattern: '/^[a-zA-ZÀ-ÿ\-]+$/', message: "Nom invalide.")]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank(message: 'Le prénom est requis.')]
-    #[Assert\Length(min: 5, max: 20, minMessage: 'Le prénom doit comporter au moins 5 caractères.', maxMessage: 'Le prénom doit comporter au maximum 20 caractères.')]
     #[Assert\Regex(pattern: '/^[a-zA-ZÀ-ÿ\-]+$/', message: "Prénom invalide.")]
     private ?string $firstName = null;
 

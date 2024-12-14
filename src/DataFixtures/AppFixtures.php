@@ -6,11 +6,12 @@ use App\Entity\Reservation;
 use App\Entity\Station;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class AppFixtures extends Fixture
+class AppFixtures extends Fixture implements FixtureGroupInterface
 {
     public function __construct(private readonly UserPasswordHasherInterface $hasher)
     {
@@ -66,5 +67,10 @@ class AppFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['UserAndAdmin'];
     }
 }
