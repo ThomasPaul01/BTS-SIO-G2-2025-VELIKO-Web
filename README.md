@@ -52,7 +52,7 @@ docker-compose down
 
 http://localhost:8025/
 
-### 🎁Bonus : AppFixtures
+### 🎁Bonus : AppFixtures (Dans un environnement de DEV)
 Si besoin de creer automatiquement **des users et admin** dans la base de donne: (⚠️Avant le lancement du site pour ne pas vider la table station)
 ```
 symfony console doctrine:fixtures:load
