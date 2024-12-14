@@ -1,7 +1,33 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Mes Favoris{% endblock %}
+{% block stylesheets %}
+    <style>
+        .reservation-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 4px 8px;/* Réduction de la taille du padding */
+        border-radius: 5px;
+        font-size: 12px;/* Réduction de la taille de la police */
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre subtile */
+        display: inline-flex;
+        align-items: center;
+        }
 
+        .reservation-btn:hover {
+        background-color: #1A67E1; /* Assombrir au survol */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée */
+        }
+
+        .reservation-btn:active {
+        transform: translateY(1px); /* Effet enfoncé au clic */
+        }
+</style>
+{% endblock %}
 {% block content %}
     {% if app.user %}
         <div class="text-muted text-center mb-3 small">
@@ -43,6 +69,9 @@
                             <button class="btn btn-danger btn-sm" onclick="removeFromFavorites({{ station.getStationId() }})">
                                 <i class="fas fa-trash-alt"></i> Supprimer
                             </button>
+                            <button id="Reservation" class="reservation-btn" onclick="redirectToReservation({{station.getStationId()}})">
+                                Effectuer une réservation
+                            </button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -80,6 +109,11 @@
                     row.remove();
                 })
                 .catch(error => console.error('Erreur:', error));
+        }
+        //Renvoyer vers la page de reservation avec l'id de la station
+        function redirectToReservation(idStationDepart) {
+
+            window.location.href = `/user/reservation/${idStationDepart}`;
         }
     </script>
 {% endblock %}
