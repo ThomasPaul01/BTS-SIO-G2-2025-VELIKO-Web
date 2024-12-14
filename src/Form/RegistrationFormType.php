@@ -43,9 +43,11 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Ville',
             ])
             ->add('agreeTerms', CheckboxType::class, [
+                "label" => "J'accepte les conditions",
                 'mapped' => false,
             ])
             ->add('plainPassword', PasswordType::class, [
+                "label" => "Mot de passe",
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -60,6 +62,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('confirmPassword', PasswordType::class, [
+                "label" => "Confirmer votre mot de passe",
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
