@@ -20,6 +20,5 @@ class AProposController extends AbstractController
         return $this->render('a_propos/index.html.twig', [
             'controller_name' => 'AProposController',
         ]);
-
     }
 }

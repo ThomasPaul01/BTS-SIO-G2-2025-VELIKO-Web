@@ -35,7 +35,6 @@ class DeleteUserController extends AbstractController
         if ($request->isMethod('POST')) {
             if ($this->isCsrfTokenValid('delete_account', $request->request->get('_token'))) {
 
-
                 // Récupérer toutes les entités StationFav associées à l'utilisateur
                 $favorites = $entityManager->getRepository(StationFav::class)->findBy(['userEmail' => $user->getUserIdentifier()]);
                 //Et les supprimer
@@ -54,7 +53,6 @@ class DeleteUserController extends AbstractController
 
                 // Rediriger après la suppression
                 return $this->redirectToRoute('app_logout');
-
 
             }
         }

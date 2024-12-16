@@ -11,7 +11,6 @@ class MentionLegalController extends AbstractController
     #[Route('/mention/legal', name: 'app_mention_legal')]
     public function index(): Response
     {
-
         $user = $this->getUser();
         if ($user && $user->isMustChangePassword())
         {

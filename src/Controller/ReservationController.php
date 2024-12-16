@@ -29,7 +29,6 @@ class ReservationController extends AbstractController
             ];
         }, $stations);
 
-
         return $this->render('reservation/index.html.twig', [
             'station_depart' => $stationDepart,
             'stations' => $stationsData,
@@ -52,7 +51,6 @@ class ReservationController extends AbstractController
         $currentDate = new \DateTime();
 
         $user=$security->getUser();
-
 
         //Creation reservation
         $reservation = new Reservation();
