@@ -66,5 +66,3 @@ Si besoin de creer automatiquement **des favoris** pour tout les utilisateurs: (
 symfony console d:f:l --group=Favorite --append
 ```
 
-
-TEST
