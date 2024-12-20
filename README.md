@@ -66,3 +66,4 @@ Si besoin de creer automatiquement **des favoris** pour tout les utilisateurs: (
 ```bash
 symfony console d:f:l --group=Favorite --append
 ```
+_test pour Alan_
