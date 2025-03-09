@@ -80,6 +80,17 @@ class ReservationController extends AbstractController
                             'headers' => ["Authorization" => $auth_token]
                         ]);
 
+                        // Mettre à jour le nombre de vélos disponibles à la station de départ
+                        $stationDepart = $entityManager->getRepository(Station::class)->find($stationDepartId);
+                        if ($typeVelo == 'electric') {
+                            $stationDepart->setElectricBikes($stationDepart->getElectricBikes() - 1);
+                        } else {
+                            $stationDepart->setMechanicalBikes($stationDepart->getMechanicalBikes() - 1);
+                        }
+                        $entityManager->persist($stationDepart);
+                        $entityManager->flush();
+
+
                         $veloFound = true;
 
                         $this->addFlash('success', "Votre réservation a été effectuée avec succès");
