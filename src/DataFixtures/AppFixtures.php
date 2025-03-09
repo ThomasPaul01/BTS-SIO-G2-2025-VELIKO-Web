@@ -65,6 +65,24 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
 
             $manager->persist($user);
         }
+        for ($i = 11; $i <= 16; $i++) {
+            $user = new User();
+            $user->setEmail("user-$i@mail.dev");
+            $user->setPassword($this->hasher->hashPassword($user, 'password'));
+            $user->setRoles(["ROLE_USER"]);
+            $user->setAddress("12 rue chezMoi");
+            $user->setName("user");
+            $user->setPostalCode("00000");
+            $user->setCity("Montreuil");
+            $user->setFirstName("user");
+            $date=new \DateTime("2000-01-01");
+            $user->setBirthdate($date);
+            $user->setVerified(true);
+            $user->setStatut(false);
+            $user->setMustChangePassword(false);
+
+            $manager->persist($user);
+        }
 
         $manager->flush();
     }
