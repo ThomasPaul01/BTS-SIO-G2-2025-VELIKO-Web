@@ -55,6 +55,19 @@ docker-compose down
 
 http://localhost:8025/
 
+# Configuration de l'API
+
+Dans le dossier `var`, créez un dossier `api`, puis à l'intérieur, créez un fichier `configdataset.json` et ajoutez-y le contenu suivant :
+
+```json
+{
+  "token": {
+    "default": "RG6F8do7ERFGsEgwkPEdW1Feyus0LXJ21E2EZRETTR65hN9DL8a3O8a"
+  }
+}
+
+``` 
+
 ### 🎁Bonus : AppFixtures (Dans un environnement de DEV)
 
 Si besoin de creer automatiquement **des users et admin** dans la base de donne: (⚠️Avant le lancement du site pour ne pas vider la table station)
@@ -69,3 +82,7 @@ Si besoin de creer automatiquement **des favoris** pour tout les utilisateurs: (
 ```bash
 symfony console d:f:l --group=Favorite --append
 ```
+
+
+
+
