@@ -1,4 +1,7 @@
-# Projet Veliko 
+# Projet Veliko Web
+
+Ce projet est en lien avec le repository suivant :  
+➡ **[Projet Veliko Java](https://github.com/ort-montreuil/BTS-SIO-G2-2025-VELIKO-Java)**
 
 ## Installation 
 
@@ -66,4 +69,3 @@ Si besoin de creer automatiquement **des favoris** pour tout les utilisateurs: (
 ```bash
 symfony console d:f:l --group=Favorite --append
 ```
-_test pour Alan_
