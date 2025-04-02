@@ -78,6 +78,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $must_change_password = false;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $adValidation = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $doubleAuthentification = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -267,6 +273,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMustChangePassword(bool $must_change_password): static
     {
         $this->must_change_password = $must_change_password;
+
+        return $this;
+    }
+
+    public function isAdValidation(): ?bool
+    {
+        return $this->adValidation;
+    }
+
+    public function setAdValidation(?bool $adValidation): static
+    {
+        $this->adValidation = $adValidation;
+
+        return $this;
+    }
+
+    public function isDoubleAuthentification(): ?bool
+    {
+        return $this->doubleAuthentification;
+    }
+
+    public function setDoubleAuthentification(?bool $doubleAuthentification): static
+    {
+        $this->doubleAuthentification = $doubleAuthentification;
 
         return $this;
     }
